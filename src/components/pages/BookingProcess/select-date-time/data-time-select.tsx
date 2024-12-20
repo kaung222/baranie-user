@@ -97,7 +97,7 @@ export function DateTimeSelector() {
             <div className=" flex-grow"></div>
 
             <div className="text-sm text-muted-foreground mt-auto">
-                Can't find a suitable time?{' '}
+                Can&apos;t find a suitable time?{' '}
                 <Link
                     href="/waitlist"
                     className="text-primary hover:text-primary/90 font-medium"

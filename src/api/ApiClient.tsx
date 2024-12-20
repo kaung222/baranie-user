@@ -66,7 +66,6 @@ ApiClient.interceptors.response.use(
             isRefreshing = true;
 
             try {
-                const accessToken = localStorage.getItem("accessToken");
                 // Call refresh token API
                 const response = await ApiClient.get(`${baseURL}/auth/refresh`);
                 console.log(response)

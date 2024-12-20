@@ -3,7 +3,7 @@ import React from 'react'
 
 type Props = {}
 
-const Page = (props: Props) => {
+const Page = ({ }: Props) => {
     return (
         <>
             <SignUpPage />
