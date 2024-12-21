@@ -19,7 +19,7 @@ export function SignUpForm() {
     }
 
     const handleGoogleSignIn = () => {
-        signIn('google', { callbackUrl: '/dashboard' })
+        signIn('google', { callbackUrl: '/' })
     }
 
     return (
