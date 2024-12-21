@@ -1,38 +1,27 @@
-import NextAuth, { NextAuthOptions } from "next-auth"
+import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 
-export const authOptions: NextAuthOptions = {
+const handler = NextAuth({
     providers: [
         GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID!,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+            clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+            clientSecret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET!,
         }),
     ],
     pages: {
         signIn: '/signup',
     },
     callbacks: {
-        async jwt({ token, account }) {
-            // Persist the access_token to the token right after signin
-            if (account) {
-                token.accessToken = account.access_token
-            }
-            return token
-        },
-        async session({ session, token }) {
-            // Send properties to the client, like an access_token from a provider.
-            //@ts-ignore
-            session.accessToken = token.accessToken
+        async session({ session, token, user }) {
+            // You can add custom session logic here
             return session
         },
+        async jwt({ token, user, account, profile, isNewUser }) {
+            // You can add custom token logic here
+            return token
+        },
     },
-    // Use JWT strategy for session handling
-    session: {
-        strategy: "jwt",
-    },
-}
-
-const handler = NextAuth(authOptions)
+})
 
 export { handler as GET, handler as POST }
 

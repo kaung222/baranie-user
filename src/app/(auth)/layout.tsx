@@ -1,4 +1,3 @@
-'use client'
 import AuthGuard from '@/components/providers/auth-guard'
 import React from 'react'
 
