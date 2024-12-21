@@ -10,14 +10,20 @@ import LogoWithBrand from '@/components/common/LogoWithBrand'
 import { Button } from '@/components/ui/button'
 import { useGetAllOrganizations } from '@/api/organization/get-organizations'
 import PageLoading from '@/components/common/PageLoading'
+import { useAuth } from '@/lib/hooks/useAuth'
 
 
 export default function LandingPage() {
     const { data, isLoading } = useGetAllOrganizations();
+    const { session, isAuthenticated } = useAuth()
+    console.log(session, isAuthenticated)
     return (
         <div className="min-h-screen">
             <nav className=" h-[80px] sticky top-0 left-0 z-20 border-b bg-white flex justify-between items-center px-3 md:px-10 py-6">
                 <LogoWithBrand />
+                <div>
+
+                </div>
                 <Button variant={"outline"} className="">Login</Button>
             </nav>
             <header className="relative">
