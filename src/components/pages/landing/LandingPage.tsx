@@ -10,21 +10,30 @@ import LogoWithBrand from '@/components/common/LogoWithBrand'
 import { Button } from '@/components/ui/button'
 import { useGetAllOrganizations } from '@/api/organization/get-organizations'
 import PageLoading from '@/components/common/PageLoading'
-import { useAuth } from '@/lib/hooks/useAuth'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { ChevronDown } from 'lucide-react'
+import { shortName } from '@/lib/utils'
+import ProfileDropdown from '@/components/layout/ProfileDropdown'
+import Link from 'next/link'
+import { useLocalstorage } from '@/lib/helpers'
+import { User } from '@/types/user'
+import LoginLayout from '@/components/layout/LoginLayout'
 
 
 export default function LandingPage() {
     const { data, isLoading } = useGetAllOrganizations();
-    const { session, isAuthenticated } = useAuth()
-    console.log(session, isAuthenticated)
+    const { getData } = useLocalstorage()
+    const accessToken = getData('accessToken');
+    const user: User | null = getData('user');
     return (
         <div className="min-h-screen">
             <nav className=" h-[80px] sticky top-0 left-0 z-20 border-b bg-white flex justify-between items-center px-3 md:px-10 py-6">
                 <LogoWithBrand />
-                <div>
-
-                </div>
-                <Button variant={"outline"} className="">Login</Button>
+                {accessToken && user ? (
+                    <ProfileDropdown user={user} />
+                ) : (
+                    <LoginLayout />
+                )}
             </nav>
             <header className="relative">
                 <div className="relative h-[560px]">

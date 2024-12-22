@@ -2,8 +2,10 @@ import { useQuery } from "@tanstack/react-query"
 import { ApiClient } from "../ApiClient"
 import { Organization } from "@/types/organization"
 import { OrgSchedule } from "@/types/org-schedule";
+import { MemberForAll } from "@/types/member";
 
 type ResponseType = {
+    members: MemberForAll[]
     organization: Organization;
     related: any[],
     schedules: OrgSchedule[]

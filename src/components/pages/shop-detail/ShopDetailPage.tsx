@@ -2,7 +2,7 @@
 import Image from 'next/image'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
-import { Clock, MapPin, Phone } from 'lucide-react'
+import { ChevronDown, Clock, MapPin, Phone } from 'lucide-react'
 import { Gallery } from './components/gallery'
 import { OpeningHours } from './components/opening-hours'
 import { ServicesList } from './components/services-list'
@@ -12,23 +12,39 @@ import { AboutSection } from './components/about-section'
 import { RelatedBusinesses } from './components/related-business'
 import { useGetDetailOrganization } from '@/api/organization/get-detail-organization'
 import useSetUrlParams from '@/lib/hooks/urlSearchParam'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import LogoWithBrand from '@/components/common/LogoWithBrand'
 import { Card } from '@/components/ui/card'
 import PageLoading from '@/components/common/PageLoading'
 import { Footer } from '../landing/components/footer'
+import ProfileDropdown from '@/components/layout/ProfileDropdown'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { shortName } from '@/lib/utils'
+import Link from 'next/link'
+import { useLocalstorage } from '@/lib/helpers'
+import { User } from '@/types/user'
+import LoginLayout from '@/components/layout/LoginLayout'
 
 export default function ShopDetails() {
     const { getQuery } = useSetUrlParams()
+    const router = useRouter()
     const { shopId } = useParams()
     const { data: organization, isLoading } = useGetDetailOrganization(String(shopId))
+    const { getData } = useLocalstorage()
+    const accessToken = getData('accessToken');
+    const user: User | null = getData('user');
+
     return (
         <div className="min-h-screen bg-background">
-            <header className="flex items-center justify-between py-6 px-3 md:px-10 h-[80px] border-b">
-                <LogoWithBrand />
-                <Button variant="outline" >
-                    Login
-                </Button>
+            <header className="flex sticky top-0 left-0 z-20 bg-white items-center justify-between py-6 px-3 md:px-10 h-[80px] border-b">
+                <div onClick={() => router.push('/')} className=" cursor-pointer">
+                    <LogoWithBrand />
+                </div>
+                {accessToken && user ? (
+                    <ProfileDropdown user={user} />
+                ) : (
+                    <LoginLayout />
+                )}
             </header>
 
             {isLoading ? (
@@ -67,7 +83,7 @@ export default function ShopDetails() {
                             <div className=' mt-10 space-y-10'>
                                 <ServicesList />
                                 <OpeningHours schedules={organization.schedules} />
-                                <TeamSection />
+                                <TeamSection members={organization.members} />
                                 <ReviewSection />
                                 <AboutSection organization={organization.organization} />
                             </div>

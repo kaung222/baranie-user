@@ -7,14 +7,12 @@ import React, { useEffect } from "react";
 const AuthGuard = ({ children }: { children: React.ReactNode }) => {
   const { getData } = useLocalstorage();
   const router = useRouter()
-
+  const accessToken = getData("accessToken");
   useEffect(() => {
-    const accessToken = getData("accessToken");
-
     if (accessToken) {
-      router.push('/calendar')
+      router.push('/')
     }
-  }, []);
+  }, [accessToken, router]);
   return (
     <>
       <div className="">{children}</div>

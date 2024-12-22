@@ -1,8 +1,10 @@
+'use client'
 import React from 'react'
 import Image from 'next/image'
 import { Star } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Organization } from '@/types/organization'
+import { useRouter } from 'next/navigation'
 
 
 type Props = {
@@ -10,9 +12,10 @@ type Props = {
 }
 
 const ShopCard = ({ organization }: Props) => {
+    const router = useRouter()
     return (
         <>
-            <div key={organization.id} className="group rounded-lg w-full max-w-[380px] overflow-hidden border border-gray-200">
+            <div key={organization.id} onClick={() => router.push(`/shop/${organization.id}`)} className="group cursor-pointer rounded-lg w-full max-w-[380px] overflow-hidden border border-gray-200">
                 <div className="relative  h-[200px]">
                     <Image
                         src={organization.images ? organization.images[0] : ""}
@@ -25,7 +28,7 @@ const ShopCard = ({ organization }: Props) => {
                     <div className="flex items-start justify-between ">
                         <h3 className="font-medium">{organization.name}</h3>
                         <Badge variant="secondary" className="mb-2 bg-brandColor text-white">
-                            {organization.types.join(" & ")}
+                            {organization?.types?.join(" & ")}
                         </Badge>
                     </div>
                     <div className="flex items-center mb-2">

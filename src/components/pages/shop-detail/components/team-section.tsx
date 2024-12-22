@@ -2,6 +2,7 @@
 import { useGetOrganizationMembers } from '@/api/organization/get-org-members'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { shortName } from '@/lib/utils'
+import { MemberForAll } from '@/types/member'
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
 
@@ -13,9 +14,12 @@ const team = [
     { name: 'Chris', role: 'Stylist', image: '/team-5.jpg' },
 ]
 
-export function TeamSection() {
-    const { shopId } = useParams()
-    const { data: members } = useGetOrganizationMembers(String(shopId))
+type Props = {
+    members: MemberForAll[]
+}
+
+export function TeamSection({ members }: Props) {
+
     return (
         <div className="mt-8">
             <h2 className="text-lg font-semibold mb-4">Team</h2>

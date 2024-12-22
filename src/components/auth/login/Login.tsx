@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { SignUpForm } from './sign-up-form'
+import { SignInForm } from './sign-in-form'
 
 export default function SignUpPage() {
     return (
@@ -28,7 +28,7 @@ export default function SignUpPage() {
                         </p>
                     </div>
 
-                    <SignUpForm />
+                    <SignInForm />
 
                     <div className="text-center">
                         <p className="text-sm text-muted-foreground">

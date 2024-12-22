@@ -1,5 +1,10 @@
+
+import { ApiClient } from "@/api/ApiClient"
+import { useGoogleLogin } from "@/api/auth/login-google"
+import { User } from "@/types/user"
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
+
 
 const handler = NextAuth({
     providers: [
@@ -8,20 +13,28 @@ const handler = NextAuth({
             clientSecret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET!,
         }),
     ],
-    pages: {
-        signIn: '/signup',
-    },
     callbacks: {
-        async session({ session, token, user }) {
-            // You can add custom session logic here
+        async jwt({ token, account }) {
+            if (account?.access_token) {
+                token.accessToken = account.id_token;
+            }
+            return token;
+        },
+        async session({ session, token }) {
+            // Send properties to the client, like an access_token from a provider.
+            session.accessToken = token.accessToken
             return session
         },
-        async jwt({ token, user, account, profile, isNewUser }) {
-            // You can add custom token logic here
-            return token
-        },
+    },
+    // Use JWT strategy for session handling
+    // session: {
+    //     strategy: "jwt",
+    // },
+    pages: {
+        signIn: '/signup',
     },
 })
 
 export { handler as GET, handler as POST }
+
 

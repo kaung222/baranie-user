@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { Facebook, Instagram, Twitter, Youtube, Linkedin, TwitterIcon as TikTok } from 'lucide-react'
 
 const businessLinks = [
-    { name: "For Partners", href: "/partners" },
+    { name: "For Partners", href: `https://management.baranie.com/` },
     { name: "Pricing", href: "/pricing" },
     { name: "Support", href: "/support" },
 ]
@@ -32,7 +32,7 @@ export function Footer() {
                         <ul className="space-y-2">
                             {businessLinks.map((link, index) => (
                                 <li key={index}>
-                                    <Link href={link.href} className="text-muted-foreground hover:text-foreground">
+                                    <Link href={link.href} className="text-muted-foreground hover:text-foreground" target="_blank">
                                         {link.name}
                                     </Link>
                                 </li>
