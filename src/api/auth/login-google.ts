@@ -20,7 +20,7 @@ type LoginResponseType = {
 }
 
 
-export const useGoogleLogin = () => {
+export const useApiGoogleLogin = () => {
     const { setData } = useLocalstorage()
     return useMutation<LoginResponseType, ErrorResponse, PayloadType>({
         mutationFn: async (payload: PayloadType) => {
@@ -29,6 +29,7 @@ export const useGoogleLogin = () => {
         onSuccess(data, variables, context) {
             toast({ title: "Google Login successful!" });
             setData("accessToken", data.accessToken);
+            setData("user", data.user);
             return data;
         },
         onError(error, variables, context) {

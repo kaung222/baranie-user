@@ -8,9 +8,9 @@ import Link from 'next/link'
 import { useLocalstorage } from '@/lib/helpers'
 import { useRouter } from 'next/navigation'
 import ConfirmDialog from '../common/confirm-dialog'
-import { signOut } from 'next-auth/react'
 import { User as UserType } from '@/types/user'
 import { shortName } from '@/lib/utils'
+import { googleLogout } from '@react-oauth/google'
 
 type Props = {
     user: UserType;
@@ -21,8 +21,8 @@ const ProfileDropdown = ({ user }: Props) => {
     const router = useRouter();
     const { deleteData } = useLocalstorage();
     const logoutHandler = () => {
-        localStorage.clear()
-        signOut()
+        localStorage.clear();
+        googleLogout();
     }
     return (
         <>

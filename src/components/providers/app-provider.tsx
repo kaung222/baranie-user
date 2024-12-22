@@ -5,22 +5,24 @@ import { Provider } from "react-redux";
 import { store } from "../../store/store";
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
-import { SessionProvider } from 'next-auth/react'
+import { GoogleOAuthProvider } from '@react-oauth/google'
 
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const queryClient = new QueryClient();
   return (
 
-    <SessionProvider>
-      <QueryClientProvider client={queryClient}>
-        <Provider store={store}>
-          <PhotoProvider>
+
+    <QueryClientProvider client={queryClient}>
+      <Provider store={store}>
+        <PhotoProvider>
+          <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
             {children}
-          </PhotoProvider>
-        </Provider>
-      </QueryClientProvider>
-    </SessionProvider>
+          </GoogleOAuthProvider>
+        </PhotoProvider>
+      </Provider>
+    </QueryClientProvider>
+
 
   );
 };

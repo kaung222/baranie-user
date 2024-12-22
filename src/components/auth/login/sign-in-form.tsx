@@ -1,6 +1,5 @@
 'use client'
-import { useState } from 'react'
-import { signIn } from 'next-auth/react'
+
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
@@ -13,11 +12,12 @@ import { LoginSchema } from 'validation-schema/login.schema'
 import { z } from 'zod'
 import { useLogin } from '@/api/auth/login'
 import { useRouter } from 'next/navigation'
-import { useAuth } from '@/lib/hooks/useAuth'
+import { GoogleLogin, useGoogleLogin } from '@react-oauth/google'
+import { useApiGoogleLogin } from '@/api/auth/login-google'
 
 export function SignInForm() {
     const { mutate, isPending } = useLogin();
-    const { login } = useAuth()
+    const { mutate: googleMutate } = useApiGoogleLogin()
     const router = useRouter()
     const form = useForm({
         resolver: zodResolver(LoginSchema),
@@ -34,9 +34,6 @@ export function SignInForm() {
                 router.push('/');
             }
         })
-    }
-    const handleGoogleSignIn = () => {
-        login()
     }
 
     return (
@@ -85,10 +82,10 @@ export function SignInForm() {
             </div>
 
             <div className="space-y-3">
-                <Button
+                {/* <Button
                     variant="outline"
                     className="w-full h-12"
-                    onClick={handleGoogleSignIn}
+                    onClick={() => handleGoogleLogin()}
                 >
                     <svg
                         className="mr-2 h-4 w-4"
@@ -106,7 +103,18 @@ export function SignInForm() {
                         />
                     </svg>
                     Continue with Google
-                </Button>
+                </Button> */}
+                <GoogleLogin
+                    onSuccess={credentialResponse => {
+                        console.log(credentialResponse);
+                        if (credentialResponse.credential) {
+                            googleMutate({ token: credentialResponse.credential })
+                        }
+                    }}
+                    onError={() => {
+                        console.log('Login Failed');
+                    }}
+                />
             </div>
         </div>
     )
