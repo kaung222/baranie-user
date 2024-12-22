@@ -15,7 +15,7 @@ const ShopCard = ({ organization }: Props) => {
     const router = useRouter()
     return (
         <>
-            <div key={organization.id} onClick={() => router.push(`/shop/${organization.id}`)} className="group cursor-pointer rounded-lg w-full max-w-[380px] overflow-hidden border border-gray-200">
+            <div key={organization.id} onClick={() => router.push(`/shops/${organization?.slug}`)} className="group cursor-pointer rounded-lg w-full max-w-[380px] overflow-hidden border border-gray-200">
                 <div className="relative  h-[200px]">
                     <Image
                         src={organization.images ? organization.images[0] : ""}

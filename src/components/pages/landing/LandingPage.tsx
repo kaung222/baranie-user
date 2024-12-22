@@ -18,21 +18,37 @@ import Link from 'next/link'
 import { useLocalstorage } from '@/lib/helpers'
 import { User } from '@/types/user'
 import LoginLayout from '@/components/layout/LoginLayout'
+import { Skeleton } from '@/components/ui/skeleton'
+import { useGetProfile } from '@/api/user/get-profile'
 
 
 export default function LandingPage() {
     const { data, isLoading } = useGetAllOrganizations();
+    const { data: profile, isLoading: loadingProfile } = useGetProfile()
     const { getData } = useLocalstorage()
     const accessToken = getData('accessToken');
     const user: User | null = getData('user');
     return (
         <div className="min-h-screen">
-            <nav className=" h-[80px] sticky top-0 left-0 z-20 border-b bg-white flex justify-between items-center px-3 md:px-10 py-6">
+            <nav className=" h-[60px] sticky top-0 left-0 z-20 border-b bg-white flex justify-between items-center px-3 md:px-10 py-6">
                 <LogoWithBrand />
-                {accessToken && user ? (
-                    <ProfileDropdown user={user} />
+                {loadingProfile ? (
+                    <div className="h-12 p-1 flex rounded-[24px] items-center gap-2 border">
+                        {/* Avatar Skeleton */}
+                        <Skeleton className="w-10 h-10 rounded-full" />
+
+                        {/* User Name Skeleton */}
+                        <Skeleton className="h-4 w-20 rounded-md" />
+
+                        {/* Chevron Skeleton */}
+                        <Skeleton className="w-4 h-4 rounded-md" />
+                    </div>
                 ) : (
-                    <LoginLayout />
+                    profile ? (
+                        <ProfileDropdown user={profile} />
+                    ) : (
+                        <LoginLayout />
+                    )
                 )}
             </nav>
             <header className="relative">

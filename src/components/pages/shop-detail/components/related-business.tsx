@@ -2,6 +2,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Star } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import { Organization } from '@/types/organization'
+import ShopCard from '@/components/common/ShopCard'
 
 const businesses = [
     {
@@ -29,43 +31,24 @@ const businesses = [
         location: '91 Kan Road, Yankin Township, Yangon',
     },
 ]
-
-export function RelatedBusinesses() {
+type Props = {
+    relatedOrgs: Organization[]
+}
+export function RelatedBusinesses({ relatedOrgs }: Props) {
     return (
         <div className="mt-12">
             <h2 className="text-lg font-semibold mb-4">
-                You might also be interested in
+                Related
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {businesses.map((business) => (
-                    <Link
-                        key={business.id}
-                        href={`/${business.id}`}
-                        className="group block"
-                    >
-                        <div className="relative h-48 mb-3">
-                            <Image
-                                src={business.image}
-                                alt={business.name}
-                                fill
-                                className="object-cover rounded-lg group-hover:opacity-90 transition-opacity"
-                            />
-                        </div>
-                        <div>
-                            <div className="flex items-center justify-between mb-1">
-                                <h3 className="font-medium">{business.name}</h3>
-                                <div className="flex items-center">
-                                    <Star className="w-4 h-4 fill-primary text-primary" />
-                                    <span className="ml-1 text-sm">{business.rating}</span>
-                                </div>
-                            </div>
-                            <Badge variant="secondary" className="mb-1">
-                                {business.category}
-                            </Badge>
-                            <p className="text-sm text-muted-foreground">{business.location}</p>
-                        </div>
-                    </Link>
-                ))}
+                {relatedOrgs && relatedOrgs.length > 0 ? (
+                    relatedOrgs.map((organization, index) => (
+                        <ShopCard key={index} organization={organization} />
+                    ))
+                ) : (
+                    <div>NO Related!</div>
+                )}
+
             </div>
         </div>
     )

@@ -13,6 +13,7 @@ export type Organization = {
     rating: number;
     latitude: string;
     longitude: string;
+    slug: string;
     notes: string;
     totalReviews: number;
     isPublished: boolean;

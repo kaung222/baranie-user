@@ -24,26 +24,42 @@ import Link from 'next/link'
 import { useLocalstorage } from '@/lib/helpers'
 import { User } from '@/types/user'
 import LoginLayout from '@/components/layout/LoginLayout'
+import { useGetProfile } from '@/api/user/get-profile'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export default function ShopDetails() {
     const { getQuery } = useSetUrlParams()
     const router = useRouter()
     const { shopId } = useParams()
     const { data: organization, isLoading } = useGetDetailOrganization(String(shopId))
+    const { data: profile, isLoading: loadingProfile } = useGetProfile()
     const { getData } = useLocalstorage()
     const accessToken = getData('accessToken');
     const user: User | null = getData('user');
 
     return (
         <div className="min-h-screen bg-background">
-            <header className="flex sticky top-0 left-0 z-20 bg-white items-center justify-between py-6 px-3 md:px-10 h-[80px] border-b">
+            <header className="flex sticky top-0 left-0 z-20 bg-white items-center justify-between py-6 px-3 md:px-10 h-[60px] border-b">
                 <div onClick={() => router.push('/')} className=" cursor-pointer">
                     <LogoWithBrand />
                 </div>
-                {accessToken && user ? (
-                    <ProfileDropdown user={user} />
+                {loadingProfile ? (
+                    <div className="h-12 p-1 flex rounded-[24px] items-center gap-2 border">
+                        {/* Avatar Skeleton */}
+                        <Skeleton className="w-10 h-10 rounded-full" />
+
+                        {/* User Name Skeleton */}
+                        <Skeleton className="h-4 w-20 rounded-md" />
+
+                        {/* Chevron Skeleton */}
+                        <Skeleton className="w-4 h-4 rounded-md" />
+                    </div>
                 ) : (
-                    <LoginLayout />
+                    profile ? (
+                        <ProfileDropdown user={profile} />
+                    ) : (
+                        <LoginLayout />
+                    )
                 )}
             </header>
 
@@ -84,7 +100,7 @@ export default function ShopDetails() {
                                 <ServicesList />
                                 <OpeningHours schedules={organization.schedules} />
                                 <TeamSection members={organization.members} />
-                                <ReviewSection />
+                                {/* <ReviewSection /> */}
                                 <AboutSection organization={organization.organization} />
                             </div>
 
@@ -135,7 +151,7 @@ export default function ShopDetails() {
                         </div>
                     </div>
 
-                    <RelatedBusinesses />
+                    <RelatedBusinesses relatedOrgs={organization.related} />
                     <Footer />
                 </main>
             )}

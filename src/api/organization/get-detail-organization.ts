@@ -7,7 +7,7 @@ import { MemberForAll } from "@/types/member";
 type ResponseType = {
     members: MemberForAll[]
     organization: Organization;
-    related: any[],
+    related: Organization[],
     schedules: OrgSchedule[]
 }
 

@@ -108,7 +108,11 @@ export function SignInForm() {
                     onSuccess={credentialResponse => {
                         console.log(credentialResponse);
                         if (credentialResponse.credential) {
-                            googleMutate({ token: credentialResponse.credential })
+                            googleMutate({ token: credentialResponse.credential }, {
+                                onSuccess() {
+                                    router.push('/');
+                                }
+                            })
                         }
                     }}
                     onError={() => {
