@@ -2,8 +2,35 @@
 
 import { Star } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import useSetUrlParams from '@/lib/hooks/urlSearchParam'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 
-export function CartSummary() {
+type Props = {
+
+}
+
+const steps = [
+    { path: '/booking', label: 'Booking' },
+    { path: '/professionals', label: 'Professionals' },
+    { path: '/schedule', label: 'Schedule' },
+    { path: '/confirm', label: 'Confirm' }
+];
+
+export function CartSummary({ }: Props) {
+    const router = useRouter();
+    const { getQuery } = useSetUrlParams();
+    const { shopId } = useParams();
+    const currentPath = usePathname();
+
+    const handleContinue = () => {
+        const currentIndex = steps.findIndex(step => currentPath.endsWith(step.path));
+        if (currentIndex !== -1 && currentIndex < steps.length - 1) {
+            router.push(`/shops/${shopId}${steps[currentIndex + 1].path}`);
+        } else {
+            console.log('You are at the final step.');
+        }
+    };
+
     return (
         <div className="bg-white rounded-lg border p-6 space-y-6 sticky top-[100px] ">
             <div className="flex items-center justify-between">
@@ -40,7 +67,7 @@ export function CartSummary() {
                 </div>
             </div>
 
-            <Button className="w-full bg-black hover:bg-black/90">
+            <Button onClick={() => handleContinue()} className="w-full bg-black hover:bg-black/90">
                 Continue
             </Button>
         </div>

@@ -1,5 +1,6 @@
 export type Organization = {
     id: number;
+    thumbnail: string;
     createdAt: string; // ISO string format for dates
     updatedAt: string;
     deletedAt: string | null;

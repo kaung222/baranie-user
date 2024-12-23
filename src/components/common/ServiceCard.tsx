@@ -3,7 +3,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import useSetUrlParams from '@/lib/hooks/urlSearchParam'
 import { secondToHour, shortName } from '@/lib/utils'
-import { AlertCircle, CameraIcon, Info, MoreVertical, Pencil, Percent, Trash, User } from 'lucide-react'
+import { AlertCircle, CameraIcon, Info, MoreVertical, Pencil, Percent, Plus, Trash, User } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -19,9 +19,11 @@ type Props = {
     notProvided?: boolean;
     memberComponent?: React.ReactNode;
     currency?: string;
+    orgId?: string;
+    booking?: boolean;
 }
 
-const ServiceCard = ({ service, editable = false, color, notProvided = false, memberComponent, currency = "MMK" }: Props) => {
+const ServiceCard = ({ service, booking = false, orgId, editable = false, color, notProvided = false, memberComponent, currency = "MMK" }: Props) => {
     const { getQuery, setQuery } = useSetUrlParams();
     const [open, setOpen] = useState(false);
 
@@ -81,7 +83,14 @@ const ServiceCard = ({ service, editable = false, color, notProvided = false, me
                             </div>
                         </div>
                         <div className="flex items-center space-x-4">
-                            <Button>Book now</Button>
+                            {orgId && (
+                                <Link href={`/shops/${orgId}/booking?sv=${service.id}`} className=' px-4 py-2 rounded-lg bg-black text-white hover:bg-black/90 '>Book now</Link>
+                            )}
+                            {booking && (
+                                <Button variant={'outline'}>
+                                    <Plus />
+                                </Button>
+                            )}
                         </div>
                     </div>
                 </div>

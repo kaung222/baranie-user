@@ -25,9 +25,9 @@ export function OpeningHours({ schedules }: Props) {
     }
     return (
         <>
-            <Card className=" w-full p-10  mb-20 mt-8 ">
+            <Card className=" w-full p-3 sm:p-6  mb-20 mt-8 ">
                 <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>Opening hours</CardTitle>
+                    <CardTitle className=" font-bold text-xl ">Opening hours</CardTitle>
 
                 </CardHeader>
                 <CardContent>

@@ -18,7 +18,7 @@ const ShopCard = ({ organization }: Props) => {
             <div key={organization.id} onClick={() => router.push(`/shops/${organization?.slug}`)} className="group cursor-pointer rounded-lg w-full max-w-[380px] overflow-hidden border border-gray-200">
                 <div className="relative  h-[200px]">
                     <Image
-                        src={organization.images ? organization.images[0] : ""}
+                        src={organization.thumbnail}
                         alt={organization.name}
                         fill
                         className="object-cover group-hover:scale-105 bg-gray-100 transition-transform duration-300"
@@ -35,7 +35,7 @@ const ShopCard = ({ organization }: Props) => {
                         <Star className="h-4 w-4 text-yellow-400 fill-current" />
                         <span className="ml-1 text-sm">{organization.rating}</span>
                     </div>
-                    <p className="text-sm text-muted-foreground">{organization.country} {organization.city} {organization.address}</p>
+                    <p className="text-sm text-muted-foreground">{organization.country} {organization.city} </p>
                 </div>
             </div>
         </>

@@ -22,7 +22,7 @@ export function TeamSection({ members }: Props) {
 
     return (
         <div className="mt-8">
-            <h2 className="text-lg font-semibold mb-4">Team</h2>
+            <h2 className="text-xl font-bold mb-4">Professional</h2>
             <div className="flex gap-16 overflow-x-auto pb-4">
                 {members?.map((member) => (
                     <div key={member.id} className="flex flex-col items-center">
@@ -33,7 +33,7 @@ export function TeamSection({ members }: Props) {
                             </Avatar>
                         </div>
                         <span className="text-sm font-medium">{member.firstName}</span>
-                        <span className="text-xs text-muted-foreground">{member.role}</span>
+                        <span className="text-xs text-muted-foreground">{member.jobTitle}</span>
                     </div>
                 ))}
             </div>

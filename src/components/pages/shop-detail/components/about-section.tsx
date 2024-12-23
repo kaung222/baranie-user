@@ -8,7 +8,7 @@ export function AboutSection({ organization }: Props) {
     return (
         <div className="space-y-6">
             <div>
-                <h2 className="text-lg font-semibold mb-4">About</h2>
+                <h2 className="text-xl font-bold mb-4">About</h2>
                 <p className="text-sm leading-relaxed">
                     {organization.notes}
                 </p>

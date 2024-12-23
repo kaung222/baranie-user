@@ -3,12 +3,14 @@ import { ApiClient } from "../ApiClient"
 import { Organization } from "@/types/organization"
 import { OrgSchedule } from "@/types/org-schedule";
 import { MemberForAll } from "@/types/member";
+import { Category } from "@/types/category";
 
 type ResponseType = {
     members: MemberForAll[]
     organization: Organization;
     related: Organization[],
-    schedules: OrgSchedule[]
+    schedules: OrgSchedule[];
+    services: Category[]
 }
 
 export const useGetDetailOrganization = (id: string) => {

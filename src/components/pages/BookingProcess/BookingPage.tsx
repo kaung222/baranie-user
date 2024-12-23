@@ -11,8 +11,10 @@ import { ProfessionalSelect } from "./professional-select/professional-select";
 import { DateTimeSelector } from "./select-date-time/data-time-select";
 import { PaymentSelect } from "./payment-method/payment-select";
 
-
-export default function BookingPage() {
+type Props = {
+    children: React.ReactNode
+}
+export default function BookingPage({ children }: Props) {
     const router = useRouter();
     const { shopId } = useParams()
     const { data: Organization } = useGetDetailOrganization(String(shopId))
@@ -22,7 +24,7 @@ export default function BookingPage() {
                 <span onClick={() => router.back()} className=" px-4 py-2 rounded-lg hover:bg-gray-100 ">
                     <ArrowLeft className=" size-6 " />
                 </span>
-                <span className=" px-4 py-2 rounded-lg hover:bg-gray-100 ">
+                <span onClick={() => router.push(`/shops/${Organization?.organization.slug}`)} className=" px-4 py-2 rounded-lg hover:bg-gray-100 ">
                     <X className=" w-6 h-6 " />
                 </span>
             </div>
@@ -30,14 +32,7 @@ export default function BookingPage() {
                 <Breadcrumb />
                 <div className="flex gap-6 ">
                     <div className=" w-full md:w-[60%] ">
-                        {/* <div className=" text-2xl font-bold mt-6 ">Select Services</div>
-                        <ServiceCategories /> */}
-                        {/* <h1 className="text-2xl font-bold mb-6 mt-6">Select Professional</h1>
-                        <ProfessionalSelect /> */}
-                        {/* <h1 className="text-2xl font-semibold mb-6">Select Date & Time</h1>
-                        <DateTimeSelector /> */}
-                        <h1 className="text-2xl font-semibold mb-6">Select payment and confirm</h1>
-                        <PaymentSelect />
+                        {children}
                     </div>
                     <div className=" hidden md:block md:w-[40%] p-5 ">
                         <CartSummary />

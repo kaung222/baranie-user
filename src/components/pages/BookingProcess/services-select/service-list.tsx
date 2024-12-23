@@ -14,7 +14,8 @@ import ServiceCard from '@/components/common/ServiceCard'
 
 
 interface ServiceListProps {
-    allCategories: Category[]
+    allCategories: Category[];
+
 }
 
 export function ServiceList({ allCategories }: ServiceListProps) {
@@ -29,7 +30,7 @@ export function ServiceList({ allCategories }: ServiceListProps) {
                         <div className=' grid grid-cols-1 gap-3 '>
                             {category.services && category.services.length > 0 ? (
                                 category.services?.map((service) => (
-                                    <ServiceCard key={service.id} service={service} />
+                                    <ServiceCard booking={true} key={service.id} service={service} />
                                 ))
                             ) : (
                                 <h3>No Service served by this business!</h3>
@@ -43,4 +44,6 @@ export function ServiceList({ allCategories }: ServiceListProps) {
         </>
     )
 }
+
+
 
