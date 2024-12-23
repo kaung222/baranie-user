@@ -9,7 +9,7 @@ const AppGuard = ({ children }: { children: React.ReactNode }) => {
   const accessToken = getData("accessToken");
   useEffect(() => {
     if (!accessToken) {
-      router.push("/login");
+      // router.push("/login");
     }
   }, [accessToken, router]);
 
