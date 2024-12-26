@@ -28,42 +28,18 @@ import { useGetProfile } from '@/api/user/get-profile'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Badge } from '@/components/ui/badge'
 import BreadCrumb from './components/bread-crumb'
+import Header from '@/components/layout/Header'
 
 export default function ShopDetails() {
     const { getQuery } = useSetUrlParams()
     const router = useRouter()
     const { shopId } = useParams()
     const { data: organization, isLoading } = useGetDetailOrganization(String(shopId))
-    const { data: profile, isLoading: loadingProfile } = useGetProfile()
-    const { getData } = useLocalstorage()
-    const accessToken = getData('accessToken');
-    const user: User | null = getData('user');
+
 
     return (
         <div className="min-h-screen bg-background">
-            <header className="flex sticky top-0 left-0 z-20 bg-white items-center justify-between py-6 px-3 md:px-10 h-[60px] border-b">
-                <div onClick={() => router.push('/')} className=" cursor-pointer">
-                    <LogoWithBrand />
-                </div>
-                {loadingProfile ? (
-                    <div className="h-12 p-1 flex rounded-[24px] items-center gap-2 border">
-                        {/* Avatar Skeleton */}
-                        <Skeleton className="w-10 h-10 rounded-full" />
-
-                        {/* User Name Skeleton */}
-                        <Skeleton className="h-4 w-20 rounded-md" />
-
-                        {/* Chevron Skeleton */}
-                        <Skeleton className="w-4 h-4 rounded-md" />
-                    </div>
-                ) : (
-                    profile ? (
-                        <ProfileDropdown user={profile} />
-                    ) : (
-                        <LoginLayout />
-                    )
-                )}
-            </header>
+            <Header />
 
             {isLoading ? (
                 <PageLoading />

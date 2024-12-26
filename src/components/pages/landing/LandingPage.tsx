@@ -20,37 +20,16 @@ import { User } from '@/types/user'
 import LoginLayout from '@/components/layout/LoginLayout'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useGetProfile } from '@/api/user/get-profile'
+import Header from '@/components/layout/Header'
 
 
 export default function LandingPage() {
     const { data, isLoading } = useGetAllOrganizations();
-    const { data: profile, isLoading: loadingProfile } = useGetProfile()
-    const { getData } = useLocalstorage()
-    const accessToken = getData('accessToken');
-    const user: User | null = getData('user');
+
+
     return (
         <div className="min-h-screen">
-            <nav className=" h-[60px] sticky top-0 left-0 z-20 border-b bg-white flex justify-between items-center px-3 md:px-10 py-6">
-                <LogoWithBrand />
-                {loadingProfile ? (
-                    <div className="h-12 p-1 flex rounded-[24px] items-center gap-2 border">
-                        {/* Avatar Skeleton */}
-                        <Skeleton className="w-10 h-10 rounded-full" />
-
-                        {/* User Name Skeleton */}
-                        <Skeleton className="h-4 w-20 rounded-md" />
-
-                        {/* Chevron Skeleton */}
-                        <Skeleton className="w-4 h-4 rounded-md" />
-                    </div>
-                ) : (
-                    profile ? (
-                        <ProfileDropdown user={profile} />
-                    ) : (
-                        <LoginLayout />
-                    )
-                )}
-            </nav>
+            <Header />
             <header className="relative">
                 <div className="relative h-[560px]">
                     <Image
@@ -84,10 +63,10 @@ export default function LandingPage() {
                         <ServiceGrid organizations={data.records} />
                     </section>
 
-                    <section>
+                    {/* <section>
                         <h2 className="text-2xl font-semibold mb-8">Trending</h2>
                         <ServiceGrid organizations={data.records} />
-                    </section>
+                    </section> */}
 
                     <Testimonials />
                     <Newsletter />
@@ -98,28 +77,3 @@ export default function LandingPage() {
         </div>
     )
 }
-
-const recommendedServices = [
-    {
-        id: 1,
-        name: "Radiant Glow Clinic",
-        rating: 6.7,
-        category: "Facials & Skincare",
-        image: "/clinic-1.jpg",
-        location: "48 Paya Road, Kampung Township, Yangon"
-    },
-    // ... more services
-]
-
-const trendingServices = [
-    {
-        id: 1,
-        name: "The Gentlemen's Parlor",
-        rating: 6.7,
-        category: "Haircuts",
-        image: "/parlor-1.jpg",
-        location: "42 Merchant Road, Pabedan Township, Yangon"
-    },
-    // ... more services
-]
-

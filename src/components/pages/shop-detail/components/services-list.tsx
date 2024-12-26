@@ -36,7 +36,7 @@ export function
                                 <TabsContent key={index} value={category.name}>
                                     <div className=' w-full space-y-5'>
                                         {category.services.map((service) => (
-                                            <ServiceCard orgId={orgId} key={service.id} service={service} />
+                                            <ServiceCard preItems={[]} orgId={orgId} key={service.id} service={service} />
                                         ))}
 
                                     </div>

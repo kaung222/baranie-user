@@ -17,7 +17,6 @@ export function Breadcrumb() {
         { name: 'Confirm', href: '/the-style-studio/confirm' },
     ]
     const pathname = usePathname()
-    console.log(pathname)
     const currentStepIndex = steps.findIndex(step => step.href === pathname)
 
     return (

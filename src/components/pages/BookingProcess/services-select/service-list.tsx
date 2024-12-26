@@ -10,8 +10,12 @@ import {
 import { Button } from '@/components/ui/button'
 import { Category } from '@/types/category'
 import ServiceCard from '@/components/common/ServiceCard'
+import useSetUrlParams from '@/lib/hooks/urlSearchParam'
 
-
+type BookItem = {
+    sv: string;
+    pf: string;
+}
 
 interface ServiceListProps {
     allCategories: Category[];
@@ -19,6 +23,9 @@ interface ServiceListProps {
 }
 
 export function ServiceList({ allCategories }: ServiceListProps) {
+    const { getQuery } = useSetUrlParams()
+    const preItems: BookItem[] = JSON.parse(getQuery('items') || '[]')
+
     return (
         <>
             <div className=" flex flex-col gap-8 ">
@@ -30,7 +37,7 @@ export function ServiceList({ allCategories }: ServiceListProps) {
                         <div className=' grid grid-cols-1 gap-3 '>
                             {category.services && category.services.length > 0 ? (
                                 category.services?.map((service) => (
-                                    <ServiceCard booking={true} key={service.id} service={service} />
+                                    <ServiceCard preItems={preItems} booking={true} key={service.id} service={service} />
                                 ))
                             ) : (
                                 <h3>No Service served by this business!</h3>

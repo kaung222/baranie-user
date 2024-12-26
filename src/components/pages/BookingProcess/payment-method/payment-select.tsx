@@ -2,13 +2,21 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { DollarSign } from 'lucide-react'
+import { DollarSign, Store } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
+import { useDebouncedCallback } from 'use-debounce'
+import useSetUrlParams from '@/lib/hooks/urlSearchParam'
+
 
 const paymentMethods = [
+  {
+    id: 'venue',
+    name: 'Pay at Venue',
+    icon: Store,
+  },
   {
     id: 'cash',
     name: 'Cash',
@@ -23,7 +31,14 @@ const paymentMethods = [
 ]
 
 export function PaymentSelect() {
-  const [selectedMethod, setSelectedMethod] = useState<string>('cash')
+  const [selectedMethod, setSelectedMethod] = useState<string>('cash');
+  const { setQuery, getQuery } = useSetUrlParams();
+  const preNote = getQuery('note')
+  const [note, setNote] = useState<string>(preNote || '');
+  const handleChangeNote = useDebouncedCallback((query: string) => {
+    setQuery({ key: 'note', value: note })
+  }, 500);
+
 
   return (
     <div className="space-y-6">
@@ -61,6 +76,11 @@ export function PaymentSelect() {
         <Label htmlFor="booking-note">Booking note</Label>
         <Textarea
           id="booking-note"
+          value={note}
+          onChange={(e) => {
+            setNote(e.target.value)
+            handleChangeNote(e.target.value)
+          }}
           placeholder="Can't wait for the appointment"
           className="min-h-[100px]"
         />

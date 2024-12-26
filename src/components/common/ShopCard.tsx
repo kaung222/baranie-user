@@ -18,7 +18,7 @@ const ShopCard = ({ organization }: Props) => {
             <div key={organization.id} onClick={() => router.push(`/shops/${organization?.slug}`)} className="group cursor-pointer rounded-lg w-full max-w-[380px] overflow-hidden border border-gray-200">
                 <div className="relative  h-[200px]">
                     <Image
-                        src={organization.thumbnail}
+                        src={organization.thumbnail || '/img/shop-empty.png'}
                         alt={organization.name}
                         fill
                         className="object-cover group-hover:scale-105 bg-gray-100 transition-transform duration-300"

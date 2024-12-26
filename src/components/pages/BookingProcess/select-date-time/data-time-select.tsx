@@ -13,24 +13,19 @@ import {
 } from '@/components/ui/select'
 import { Calendar } from '@/components/ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { generateTimeArray } from '@/lib/data'
+import useSetUrlParams from '@/lib/hooks/urlSearchParam'
+import { format } from 'date-fns'
 
-const timeSlots = [
-    '09:00',
-    '10:00',
-    '11:00',
-    '12:00',
-    '13:00',
-    '14:00',
-    '15:00',
-    '16:00',
-    '17:00',
-    '18:00',
-    '19:00',
-]
 
 export function DateTimeSelector() {
-    const [date, setDate] = useState<Date>()
-    const [time, setTime] = useState<string>()
+    // const [date, setDate] = useState<Date>();
+    // const [time, setTime] = useState<string>();
+    const { setQuery, getQuery } = useSetUrlParams();
+    const date: Date = new Date(getQuery("date"));
+    const time: string = getQuery('time');
+
+
 
     return (
         <div className="space-y-6 w-full h-full flex flex-col p-10 ">
@@ -51,52 +46,36 @@ export function DateTimeSelector() {
                                 <Calendar
                                     mode="single"
                                     selected={date}
-                                    onSelect={setDate}
+                                    onSelect={(e) => {
+                                        e && setQuery({ key: 'date', value: format(e, "yyyy-MM-dd") })
+                                    }}
                                     className="w-full"
                                     disabled={(date) => date < new Date()}
                                 />
                             </PopoverContent>
                         </Popover>
                     </div>
-                    {/* <div className="relative">
-                        <Button
-                            variant="outline"
-                            className="w-full justify-start text-left font-normal"
-                        >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {date ? date.toLocaleDateString() : 'Select Date'}
-                        </Button>
-                    </div>
-                    <div className="rounded-lg border bg-card">
-                        <Calendar
-                            mode="single"
-                            selected={date}
-                            onSelect={setDate}
-                            className="w-full"
-                            disabled={(date) => date < new Date()}
-                        />
-                    </div> */}
                 </div>
 
                 <div>
-                    <Select value={time} onValueChange={setTime}>
+                    <Select disabled={!date} value={time} onValueChange={(e) => setQuery({ key: 'time', value: e })}>
                         <SelectTrigger className="w-full">
                             <Clock className="mr-2 h-4 w-4" />
                             <SelectValue placeholder="Choose Time" />
                         </SelectTrigger>
                         <SelectContent>
-                            {timeSlots.map((slot) => (
-                                <SelectItem key={slot} value={slot}>
-                                    {slot}
+                            {generateTimeArray().map((slot, index) => (slot.value >= 28800 && slot.value <= 64800) && (
+                                <SelectItem key={index} value={String(slot.value)}>
+                                    {slot.name}
                                 </SelectItem>
                             ))}
                         </SelectContent>
                     </Select>
                 </div>
             </div>
-            <div className=" flex-grow"></div>
+            <div className=" h-[200px] "></div>
 
-            <div className="text-sm text-muted-foreground mt-auto">
+            <div className="text-sm text-muted-foreground ">
                 Can&apos;t find a suitable time?{' '}
                 <Link
                     href="/waitlist"

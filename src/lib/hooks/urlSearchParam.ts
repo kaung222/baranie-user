@@ -17,7 +17,7 @@ const useSetUrlParams = () => {
     value.length === 0 ? params.delete(key) : params.set(key, value);
     backToFirstPage ? params.set("page", "1") : null;
     const queryString = params.toString();
-    router.push(path + "?" + queryString);
+    router.push(path + "?" + queryString, { scroll: false });
   };
   const deleteQuery = ({ key }: { key: string }): void => {
     params.delete(key);
