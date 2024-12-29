@@ -13,11 +13,11 @@ type ResponseType = {
     services: Category[]
 }
 
-export const useGetDetailOrganization = (id: string) => {
-    return useQuery<Organization>({
-        queryKey: ["detailOrganization", id],
+export const useGetDetailOrganizationBySlug = (slug: string) => {
+    return useQuery<ResponseType>({
+        queryKey: ["detailOrganizationBySlug", slug],
         queryFn: async () => {
-            return await ApiClient.get(`/organizations/by/${id}`).then(res => res.data)
+            return await ApiClient.get(`/organizations/${slug}`).then(res => res.data)
         },
         staleTime: 60 * 1000,
         refetchOnWindowFocus: false

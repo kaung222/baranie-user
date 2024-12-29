@@ -30,7 +30,7 @@ export default function BookingPage({ children }: Props) {
                 <span onClick={() => router.back()} className=" px-4 py-2 rounded-lg hover:bg-gray-100 ">
                     <ArrowLeft className=" size-6 " />
                 </span>
-                <span onClick={() => router.push(`/shops/${Organization?.organization.slug}`)} className=" px-4 py-2 rounded-lg hover:bg-gray-100 ">
+                <span onClick={() => router.push(`/shops/${Organization?.slug}`)} className=" px-4 py-2 rounded-lg hover:bg-gray-100 ">
                     <X className=" w-6 h-6 " />
                 </span>
             </div>

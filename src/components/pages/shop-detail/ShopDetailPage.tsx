@@ -10,7 +10,6 @@ import { TeamSection } from './components/team-section'
 import { ReviewSection } from './components/review-section'
 import { AboutSection } from './components/about-section'
 import { RelatedBusinesses } from './components/related-business'
-import { useGetDetailOrganization } from '@/api/organization/get-detail-organization'
 import useSetUrlParams from '@/lib/hooks/urlSearchParam'
 import { useParams, useRouter } from 'next/navigation'
 import LogoWithBrand from '@/components/common/LogoWithBrand'
@@ -29,12 +28,13 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Badge } from '@/components/ui/badge'
 import BreadCrumb from './components/bread-crumb'
 import Header from '@/components/layout/Header'
+import { useGetDetailOrganizationBySlug } from '@/api/organization/get-detail-organization-bySlug'
 
 export default function ShopDetails() {
     const { getQuery } = useSetUrlParams()
     const router = useRouter()
     const { shopId } = useParams()
-    const { data: organization, isLoading } = useGetDetailOrganization(String(shopId))
+    const { data: organization, isLoading } = useGetDetailOrganizationBySlug(String(shopId))
 
 
     return (
