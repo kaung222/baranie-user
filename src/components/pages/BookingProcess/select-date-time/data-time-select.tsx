@@ -16,22 +16,29 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { generateTimeArray } from '@/lib/data'
 import useSetUrlParams from '@/lib/hooks/urlSearchParam'
 import { format } from 'date-fns'
+import { useParams } from 'next/navigation'
+import { useGetDetailOrganizationBySlug } from '@/api/organization/get-detail-organization-bySlug'
+import SelectDate from './select-date'
 
 
 export function DateTimeSelector() {
     // const [date, setDate] = useState<Date>();
     // const [time, setTime] = useState<string>();
+    const { shopId } = useParams()
+    const { data: result } = useGetDetailOrganizationBySlug(String(shopId))
     const { setQuery, getQuery } = useSetUrlParams();
-    const date: Date = new Date(getQuery("date"));
+    const date: Date | undefined = getQuery('date') ? new Date(getQuery("date")) : undefined
     const time: string = getQuery('time');
-
 
 
     return (
         <div className="space-y-6 w-full h-full flex flex-col p-10 ">
             <div className="grid sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                    <div className="relative">
+                    {result?.schedules && (
+                        <SelectDate orgSchedule={result?.schedules} />
+                    )}
+                    {/* <div className="relative">
                         <Popover>
                             <PopoverTrigger asChild>
                                 <Button
@@ -54,7 +61,7 @@ export function DateTimeSelector() {
                                 />
                             </PopoverContent>
                         </Popover>
-                    </div>
+                    </div> */}
                 </div>
 
                 <div>

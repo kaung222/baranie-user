@@ -14,11 +14,13 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { shortName } from '@/lib/utils'
 import { useBookAppointment } from '@/api/appointment/book-appointment'
 import { User } from '@/types/user'
+import { toast } from '@/hooks/use-toast'
 
 type Props = {
     services: Service[];
     professionals: MemberForAll[];
     user: User;
+    orgId: number;
 }
 
 type BookItem = {
@@ -39,7 +41,7 @@ const steps = [
     { path: '/confirm', label: 'Confirm' }
 ];
 
-export function CartSummary({ services, professionals, user }: Props) {
+export function CartSummary({ services, professionals, user, orgId }: Props) {
     const router = useRouter();
     const { getQuery } = useSetUrlParams();
     const searchParams = new URLSearchParams(window.location.search);
@@ -55,6 +57,44 @@ export function CartSummary({ services, professionals, user }: Props) {
     const showCageBookingItems: ShowCageItem[] = preItems.map((item) => ({ service: services.find(s => s.id == item.sv), professional: professionals.find(p => p.id == staff) }))
 
     console.log(staff)
+
+    const handleContinueFromBooking = () => {
+        console.log(items)
+        if (!items || items == '[]') {
+            return toast({ title: "At least, one selected service need to book appointment!", variant: "destructive" })
+        }
+        router.push(`/shops/${shopId}/professionals?items=${items}&staff=${staff}&date=${date}&time=${time}`);
+    }
+    const handleContinueFromProfessionals = () => {
+        if (!staff) {
+            return toast({ title: "Select one professional , any or per-service!", variant: "destructive" })
+        }
+        router.push(`/shops/${shopId}/schedule?items=${items}&staff=${staff}&date=${date}&time=${time}`);
+    }
+    const handleContinueFromSchedule = () => {
+        if (!date || !time) {
+            return toast({ title: "Select schedule date and time!", variant: "destructive" })
+        }
+        router.push(`/shops/${shopId}/confirm?items=${items}&staff=${staff}&date=${date}&time=${time}`);
+    }
+
+    const handleConfirm = () => {
+        const payload = {
+            orgId: Number(orgId),
+            date: date,
+            username: `${user.firstName} ${user.lastName}`,
+            notes: 'helo',
+            status: 'pending',
+            phone: user.phone || '+959425743536',
+            gender: user.gender,
+            profilePicture: user.profilePicture,
+            email: user.email,
+            bookingItems: preItems.map((item) => ({ serviceId: item.sv, memberId: staff })),
+            startTime: Number(time)
+        }
+        mutate(payload)
+        console.log(payload)
+    }
 
     const handleContinue = () => {
         const currentIndex = steps.findIndex(step => currentPath.endsWith(step.path));
@@ -138,16 +178,55 @@ export function CartSummary({ services, professionals, user }: Props) {
                 </div>
             </div>
 
-            <Button disabled={isPending} onClick={() => handleContinue()} className="w-full bg-black hover:bg-black/90">
-                {isPending ? (
-                    <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        submitting...
-                    </>
-                ) : (
-                    'Continue'
-                )}
-            </Button>
+            {currentPath.endsWith('/booking') && (
+                <Button disabled={isPending} onClick={() => handleContinueFromBooking()} className="w-full bg-black hover:bg-black/90">
+                    {isPending ? (
+                        <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            submitting...
+                        </>
+                    ) : (
+                        'Continue'
+                    )}
+                </Button>
+            )}
+            {currentPath.endsWith('/professionals') && (
+                <Button disabled={isPending} onClick={() => handleContinueFromProfessionals()} className="w-full bg-black hover:bg-black/90">
+                    {isPending ? (
+                        <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            submitting...
+                        </>
+                    ) : (
+                        'Continue'
+                    )}
+                </Button>
+            )}
+            {currentPath.endsWith('/schedule') && (
+                <Button disabled={isPending} onClick={() => handleContinueFromSchedule()} className="w-full bg-black hover:bg-black/90">
+                    {isPending ? (
+                        <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            submitting...
+                        </>
+                    ) : (
+                        'Continue'
+                    )}
+                </Button>
+            )}
+            {currentPath.endsWith('/confirm') && (
+                <Button disabled={isPending} onClick={() => handleConfirm()} className="w-full bg-black hover:bg-black/90">
+                    {isPending ? (
+                        <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            submitting...
+                        </>
+                    ) : (
+                        'Confirm'
+                    )}
+                </Button>
+            )}
+
         </div>
     )
 }

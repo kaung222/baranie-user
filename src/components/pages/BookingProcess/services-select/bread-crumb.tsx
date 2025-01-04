@@ -5,16 +5,20 @@ import { useParams, usePathname } from 'next/navigation'
 import { ChevronRight } from 'lucide-react'
 import { cn } from "@/lib/utils"
 
+type Props = {
+    slug: string
+    shopName: string
+}
 
-export function Breadcrumb() {
+export function Breadcrumb({ slug, shopName }: Props) {
     const { shopId } = useParams()
     const steps = [
         { name: 'Home', href: '/' },
-        { name: 'The Style Studio', href: `/shop/${shopId}` },
-        { name: 'Services', href: `/shop/${shopId}/booking` },
-        { name: 'Professionals', href: `/shop/${shopId}/staff` },
-        { name: 'Date & Time', href: '/the-style-studio/date-time' },
-        { name: 'Confirm', href: '/the-style-studio/confirm' },
+        { name: shopName, href: `/shops/${slug}` },
+        { name: 'Services', href: `/shops/${shopId}/booking` },
+        { name: 'Professionals', href: `/shops/${shopId}/professionals` },
+        { name: 'Date & Time', href: `/shops/${shopId}/schedule` },
+        { name: 'Confirm', href: `/shops/${shopId}/confirm` },
     ]
     const pathname = usePathname()
     const currentStepIndex = steps.findIndex(step => step.href === pathname)

@@ -29,9 +29,15 @@ import { Badge } from '@/components/ui/badge'
 import BreadCrumb from './components/bread-crumb'
 import Header from '@/components/layout/Header'
 import { useGetDetailOrganizationBySlug } from '@/api/organization/get-detail-organization-bySlug'
+import ConfirmDialog from '@/components/common/confirm-dialog'
+import ControllableDialog from '@/components/common/control-dialog'
+import AppDialog from '@/components/common/dialog'
+import { QuickLogin } from './quick-login'
 
 export default function ShopDetails() {
     const { getQuery } = useSetUrlParams()
+    const { getData } = useLocalstorage()
+    const accessToken = getData("accessToken")
     const router = useRouter()
     const { shopId } = useParams()
     const { data: organization, isLoading } = useGetDetailOrganizationBySlug(String(shopId))
@@ -140,9 +146,19 @@ export default function ShopDetails() {
                                             <div>32 Inya Road, Bahan Township, Yangon</div>
                                         </div>
                                     </div>
-                                    <Link href={`/shops/${organization.organization.id}/booking`} className=' w-full px-4 py-2 rounded-lg bg-brandColor hover:bg-brandColor/90 text-white block'>
-                                        Book now
-                                    </Link>
+                                    {accessToken ? (
+                                        <Link href={`/shops/${organization.organization.slug}/booking`} className=' w-full px-4 py-2 rounded-lg bg-brandColor hover:bg-brandColor/90 text-white block'>
+                                            Book now
+                                        </Link>
+                                    ) : (
+                                        <AppDialog title='Need to Login!' trigger={(
+                                            <span className=' w-full px-4 py-2 rounded-lg bg-brandColor hover:bg-brandColor/90 text-white block '>Book now</span>
+                                        )}>
+                                            <div className="p-3 ">
+                                                <QuickLogin />
+                                            </div>
+                                        </AppDialog>
+                                    )}
                                 </Card>
                             </div>
                         </div>

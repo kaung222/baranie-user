@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import emailSlice from "./slices/email.slice";
+import userSliceReducer from "./slices/user.slice";
 
 export const store = configureStore({
   reducer: {
     email: emailSlice,
+    user: userSliceReducer
   },
 });
 

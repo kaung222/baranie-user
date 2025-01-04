@@ -14,9 +14,9 @@ const Layout = ({ children }: Props) => {
     };
 
     return (
-        <AppGuard>
+        <>
             {children}
-        </AppGuard>
+        </>
     )
 }
 

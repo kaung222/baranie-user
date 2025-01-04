@@ -6,6 +6,7 @@ import { ServiceList } from './service-list'
 import { useGetOrganizationServices } from '@/api/organization/get-organization-services'
 import { useParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
+import { useGetDetailOrganizationBySlug } from '@/api/organization/get-detail-organization-bySlug'
 
 // const categories = [
 //     { id: 'featured', name: 'Featured' },
@@ -51,12 +52,13 @@ const services = {
 
 export function ServiceCategories() {
     const { shopId } = useParams()
-    const { data: categories } = useGetOrganizationServices(String(shopId));
+    const { data: result } = useGetDetailOrganizationBySlug(String(shopId))
+    // const { data: categories } = useGetOrganizationServices(String(shopId));
 
     return (
         <div defaultValue="featured" className="w-full" >
             <div className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent mb-6">
-                {categories?.map((category) => (
+                {result?.services?.map((category) => (
                     <Button
                         key={category.id}
                         value={category.id}
@@ -66,8 +68,8 @@ export function ServiceCategories() {
                     </Button>
                 ))}
             </div>
-            {categories && (
-                <ServiceList allCategories={categories} />
+            {result?.services && (
+                <ServiceList allCategories={result.services} />
             )}
         </div>
     )

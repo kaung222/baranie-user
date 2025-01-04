@@ -11,6 +11,9 @@ import React, { useState } from 'react'
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
 import { Service } from '@/types/service'
+import AppDialog from './dialog'
+import { QuickLogin } from '../pages/shop-detail/quick-login'
+import { useLocalstorage } from '@/lib/helpers'
 
 type BookItem = {
     sv: string;
@@ -33,6 +36,8 @@ type Props = {
 
 const ServiceCard = ({ service, preItems, booking = false, orgId, editable = false, color, notProvided = false, memberComponent, currency = "MMK" }: Props) => {
     const { setQuery } = useSetUrlParams();
+    const { getData } = useLocalstorage()
+    const accessToken = getData('accessToken')
     const [open, setOpen] = useState(false);
 
 
@@ -115,7 +120,20 @@ const ServiceCard = ({ service, preItems, booking = false, orgId, editable = fal
                         </div>
                         <div className="flex items-center space-x-4">
                             {orgId && (
-                                <Link href={`/shops/${orgId}/booking`} className=' px-4 py-2 rounded-lg bg-black text-white hover:bg-black/90 '>Book now</Link>
+                                <>
+                                    {accessToken ? (
+                                        <Link href={`/shops/${orgId}/booking`} className=' px-4 py-2 rounded-lg bg-black text-white hover:bg-black/90 '>Book now</Link>
+
+                                    ) : (
+                                        <AppDialog title='Need to Login!' trigger={(
+                                            <span className=' w-full px-4 py-2 rounded-lg bg-brandColor hover:bg-brandColor/90 text-white block '>Book now</span>
+                                        )}>
+                                            <div className="p-3 ">
+                                                <QuickLogin />
+                                            </div>
+                                        </AppDialog>
+                                    )}
+                                </>
                             )}
                             {booking && (
                                 isServiceSelected(service.id) ? (
