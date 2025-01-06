@@ -4,23 +4,24 @@ import { ChevronDown, Loader2, Star } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import useSetUrlParams from '@/lib/hooks/urlSearchParam'
 import { useParams, usePathname, useRouter } from 'next/navigation'
-import { useGetOrganizationServices } from '@/api/organization/get-organization-services'
-import { useGetOrganizationMembers } from '@/api/organization/get-org-members'
 import { Service } from '@/types/service'
 import { MemberForAll } from '@/types/member'
-import ServiceCard from '@/components/common/ServiceCard'
 import MiniServiceCard from '@/components/common/MiniServiceCard'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { shortName } from '@/lib/utils'
 import { useBookAppointment } from '@/api/appointment/book-appointment'
 import { User } from '@/types/user'
 import { toast } from '@/hooks/use-toast'
+import { PhoneNumberDialog } from './phone-add-dialog'
+import { useState } from 'react'
+import { Organization } from '@/types/organization'
+import Image from 'next/image'
 
 type Props = {
     services: Service[];
     professionals: MemberForAll[];
     user: User;
-    orgId: number;
+    organization: Organization;
 }
 
 type BookItem = {
@@ -41,22 +42,25 @@ const steps = [
     { path: '/confirm', label: 'Confirm' }
 ];
 
-export function CartSummary({ services, professionals, user, orgId }: Props) {
+export function CartSummary({ services, professionals, user, organization }: Props) {
     const router = useRouter();
     const { getQuery } = useSetUrlParams();
     const searchParams = new URLSearchParams(window.location.search);
-    const { mutate, isPending } = useBookAppointment()
+    const { mutate, isPending } = useBookAppointment();
     const { shopId } = useParams();
     const currentPath = usePathname();
     const staff = getQuery('staff');
     const items = getQuery('items');
     const date = getQuery('date')
     const time = getQuery('time');
+    const note = getQuery('note');
     const preItems: BookItem[] = JSON.parse(items || '[]');
+    const [isPhoneDialogOpen, setIsPhoneDialogOpen] = useState(false);
 
-    const showCageBookingItems: ShowCageItem[] = preItems.map((item) => ({ service: services.find(s => s.id == item.sv), professional: professionals.find(p => p.id == staff) }))
 
-    console.log(staff)
+
+    const showCageBookingItems: ShowCageItem[] = preItems.map((item) => ({ service: services.find(s => s.id == item.sv), professional: staff == 'per-service' ? professionals.find(p => p.id == item.pf) : professionals.find(p => p.id == staff) }))
+
 
     const handleContinueFromBooking = () => {
         console.log(items)
@@ -65,7 +69,18 @@ export function CartSummary({ services, professionals, user, orgId }: Props) {
         }
         router.push(`/shops/${shopId}/professionals?items=${items}&staff=${staff}&date=${date}&time=${time}`);
     }
+
     const handleContinueFromProfessionals = () => {
+        if (!staff) {
+            return toast({ title: "Select one professional , any or per-service!", variant: "destructive" })
+        }
+        if (staff == 'per-service') {
+            return router.push(`/shops/${shopId}/staff-per-service?items=${items}&staff=${staff}&date=${date}&time=${time}`);
+        }
+        router.push(`/shops/${shopId}/schedule?items=${items}&staff=${staff}&date=${date}&time=${time}`);
+    }
+
+    const handleContinueFromProfessionalPerService = () => {
         if (!staff) {
             return toast({ title: "Select one professional , any or per-service!", variant: "destructive" })
         }
@@ -79,64 +94,53 @@ export function CartSummary({ services, professionals, user, orgId }: Props) {
     }
 
     const handleConfirm = () => {
+        if (!user.phone) {
+            return setIsPhoneDialogOpen(true)
+        }
         const payload = {
-            orgId: Number(orgId),
+            orgId: Number(organization.id),
             date: date,
             username: `${user.firstName} ${user.lastName}`,
-            notes: 'helo',
+            notes: note,
             status: 'pending',
-            phone: user.phone || '+959425743536',
+            phone: user.phone,
             gender: user.gender,
             profilePicture: user.profilePicture,
             email: user.email,
-            bookingItems: preItems.map((item) => ({ serviceId: item.sv, memberId: staff })),
+            bookingItems: preItems.map((item) => ({ serviceId: item.sv, memberId: staff == 'per-service' ? item.pf : staff })),
             startTime: Number(time)
         }
         mutate(payload)
         console.log(payload)
     }
 
-    const handleContinue = () => {
-        const currentIndex = steps.findIndex(step => currentPath.endsWith(step.path));
-        if (currentIndex !== -1 && currentIndex < steps.length - 1) {
-            router.push(`/shops/${shopId}${steps[currentIndex + 1].path}?items=${items}&staff=${staff}&date=${date}&time=${time}`);
-        } else {
-            console.log('You are at the final step.');
-            const payload = {
-                orgId: Number(shopId),
-                date: date,
-                username: `${user.firstName} ${user.lastName}`,
-                notes: 'helo',
-                status: 'pending',
-                phone: user.phone || '+959425743536',
-                gender: user.gender,
-                profilePicture: user.profilePicture,
-                email: user.email,
-                bookingItems: preItems.map((item) => ({ serviceId: item.sv, memberId: staff })),
-                startTime: Number(time)
-            }
-            // mutate(payload)
-            console.log(payload)
-        }
-    };
 
     const totalOriginalPrice = showCageBookingItems.flatMap(item => item.service).reduce((pv, cv) => pv + Number(cv?.price), 0);
     const totalDiscountPrice = showCageBookingItems.flatMap(item => item.service).reduce((pv, cv) => pv + Number(cv?.discountPrice), 0);
 
     return (
         <div className="bg-white rounded-lg border p-6 space-y-6 sticky top-[100px] ">
-            <div className="flex items-center justify-between">
-                <h2 className="font-medium">The Style Studio</h2>
-                <div className="flex items-center gap-1">
-                    <Star className="h-4 w-4 fill-primary text-primary" />
-                    <span className="text-sm font-medium">5.0</span>
+            <div className=' flex items-start gap-2 '>
+                <Avatar className=' rounded-sm w-24 h-20 '>
+                    <AvatarImage src={organization.thumbnail} alt={shortName(organization.name)} className=' object-cover ' />
+                    <AvatarFallback className=" rounded-sm">{shortName(organization.name)}</AvatarFallback>
+                </Avatar>
+                <div>
+                    <div className="flex items-center justify-between">
+                        <h2 className="font-medium">{organization.name}</h2>
+                        <div className="flex items-center gap-1">
+                            <Star className="h-4 w-4 fill-primary text-primary" />
+                            <span className="text-sm font-medium">{organization.rating}</span>
+                        </div>
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                        {organization.address} {organization.country}
+                    </p>
                 </div>
-            </div>
-            <p className="text-sm text-muted-foreground">
-                32 Paya Road, Bahan Township, Yangon
-            </p>
 
-            <div className="border-t pt-6 max-h-[250px] overflow-y-auto ">
+            </div>
+
+            <div className="border-t pt-6 max-h-[250px] overflow-y-auto space-y-1 ">
                 {showCageBookingItems.map((item, index) => item.service && (
                     <MiniServiceCard key={index} service={item.service} memberComponent={item.professional ? (
                         <div className=" px-1 py-1 w-[180px] cursor-pointer flex-shrink-0 flex-nowrap border rounded-[18px] h-9 ">
@@ -202,6 +206,18 @@ export function CartSummary({ services, professionals, user, orgId }: Props) {
                     )}
                 </Button>
             )}
+            {currentPath.endsWith('/staff-per-service') && (
+                <Button disabled={isPending} onClick={() => handleContinueFromProfessionalPerService()} className="w-full bg-black hover:bg-black/90">
+                    {isPending ? (
+                        <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            submitting...
+                        </>
+                    ) : (
+                        'Continue'
+                    )}
+                </Button>
+            )}
             {currentPath.endsWith('/schedule') && (
                 <Button disabled={isPending} onClick={() => handleContinueFromSchedule()} className="w-full bg-black hover:bg-black/90">
                     {isPending ? (
@@ -222,11 +238,15 @@ export function CartSummary({ services, professionals, user, orgId }: Props) {
                             submitting...
                         </>
                     ) : (
-                        'Confirm'
+                        'Confirm Booking'
                     )}
                 </Button>
             )}
 
+            <PhoneNumberDialog
+                isOpen={isPhoneDialogOpen}
+                onClose={() => setIsPhoneDialogOpen(false)}
+            />
         </div>
     )
 }

@@ -27,14 +27,14 @@ type Props = {
     notProvided?: boolean;
     memberComponent?: React.ReactNode;
     currency?: string;
-    orgId?: string;
+    orgSlug?: string;
     booking?: boolean;
     preItems: BookItem[]
 }
 
 
 
-const ServiceCard = ({ service, preItems, booking = false, orgId, editable = false, color, notProvided = false, memberComponent, currency = "MMK" }: Props) => {
+const ServiceCard = ({ service, preItems, booking = false, orgSlug, editable = false, color, notProvided = false, memberComponent, currency = "MMK" }: Props) => {
     const { setQuery } = useSetUrlParams();
     const { getData } = useLocalstorage()
     const accessToken = getData('accessToken')
@@ -50,10 +50,9 @@ const ServiceCard = ({ service, preItems, booking = false, orgId, editable = fal
 
         const item: BookItem = {
             sv: serviceId,
-            pf: 'un'
+            pf: 'any'
         }
         const newItems = [...preItems, item];
-
         setQuery({ key: 'items', value: JSON.stringify(newItems) })
     }
 
@@ -119,10 +118,10 @@ const ServiceCard = ({ service, preItems, booking = false, orgId, editable = fal
                             </div>
                         </div>
                         <div className="flex items-center space-x-4">
-                            {orgId && (
+                            {orgSlug && (
                                 <>
                                     {accessToken ? (
-                                        <Link href={`/shops/${orgId}/booking`} className=' px-4 py-2 rounded-lg bg-black text-white hover:bg-black/90 '>Book now</Link>
+                                        <Link href={`/shops/${orgSlug}/booking?items=${JSON.stringify([{ sv: service.id, pf: 'any' }])}`} className=' px-4 py-2 rounded-lg bg-black text-white hover:bg-black/90 '>Book now</Link>
 
                                     ) : (
                                         <AppDialog title='Need to Login!' trigger={(

@@ -44,7 +44,7 @@ export default function BookingPage({ children }: Props) {
                     </div>
                     <div className=" hidden md:block md:w-[40%] p-5 ">
                         {result?.services && result.members && profile && (
-                            <CartSummary orgId={result.organization.id} user={profile} services={result.services?.flatMap(c => c.services)} professionals={result.members} />
+                            <CartSummary organization={result.organization} user={profile} services={result.services?.flatMap(c => c.services)} professionals={result.members} />
                         )}
                     </div>
                 </div>

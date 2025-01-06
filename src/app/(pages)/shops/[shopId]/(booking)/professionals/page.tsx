@@ -1,4 +1,6 @@
+
 import { ProfessionalSelect } from '@/components/pages/BookingProcess/professional-select/professional-select'
+import { useParams } from 'next/navigation'
 import React from 'react'
 
 type Props = {}

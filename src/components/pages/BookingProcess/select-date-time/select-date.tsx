@@ -5,7 +5,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Button } from '@/components/ui/button'
 import { CalendarIcon } from 'lucide-react'
 import useSetUrlParams from '@/lib/hooks/urlSearchParam'
-import { format, isSunday } from 'date-fns'
+import { format, isSunday, subDays } from 'date-fns'
 
 type Props = {
     orgSchedule: OrgSchedule[]
@@ -36,7 +36,7 @@ const SelectDate = ({ orgSchedule }: Props) => {
                                 e && setQuery({ key: 'date', value: format(e, "yyyy-MM-dd") })
                             }}
                             className="w-full"
-                            disabled={(date) => date < new Date()}
+                            disabled={(date) => date < subDays(new Date(), 1)}
                         />
                     </PopoverContent>
                 </Popover>

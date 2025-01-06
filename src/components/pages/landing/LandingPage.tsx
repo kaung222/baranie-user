@@ -2,7 +2,6 @@
 import Image from 'next/image'
 import { Search } from './components/search'
 import { Categories } from './components/categories'
-import { ServiceGrid } from './components/new-shop-list'
 import { Testimonials } from './components/testimonials'
 import { Newsletter } from './components/newsletter'
 import { Footer } from './components/footer'
@@ -21,6 +20,7 @@ import LoginLayout from '@/components/layout/LoginLayout'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useGetProfile } from '@/api/user/get-profile'
 import Header from '@/components/layout/Header'
+import { ShopGrid } from './components/new-shop-list'
 
 
 export default function LandingPage() {
@@ -60,7 +60,7 @@ export default function LandingPage() {
 
                     <section>
                         <h2 className="text-2xl font-semibold mb-8">New to Baranie</h2>
-                        <ServiceGrid organizations={data.records} />
+                        <ShopGrid organizations={data.records} />
                     </section>
 
                     {/* <section>

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { redirect } from "next/navigation";
 
 const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -49,10 +50,10 @@ ApiClient.interceptors.response.use(
 
         // If the error is 401 and the request was not retried error.response?.data?.message == "jwt expired" &&
         if (error.response?.status === 401 && error.response?.data?.message == "Role cannot access!") {
-            // localStorage.clear();
-            // return window.location.reload();
+            localStorage.clear();
+            return redirect('/login')
         }
-        if (error.response?.status === 401 && (error.response?.data?.message == "jwt expired" || "Role cannot access!") && !originalRequest._retry) {
+        if (error.response?.status === 401 && (error.response?.data?.message == "jwt expired") && !originalRequest._retry) {
 
             if (isRefreshing) {
                 // Queue requests while refresh is ongoing

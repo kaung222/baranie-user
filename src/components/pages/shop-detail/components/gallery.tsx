@@ -27,8 +27,6 @@ export function Gallery({ organization }: Props) {
                         <AvatarImage src={organization.images ? organization.images[0] : undefined} alt={shortName(organization.name)} className=' object-cover ' />
                         <AvatarFallback className=" rounded-sm">{shortName(organization.name)}</AvatarFallback>
                     </Avatar>
-
-
                 </div>
                 <div className=" hidden sm:flex w-[40%] lg:w-[60%] flex-row gap-4 h-full">
                     <div className=" w-full lg:w-1/2 gap-2 h-full flex flex-col">
