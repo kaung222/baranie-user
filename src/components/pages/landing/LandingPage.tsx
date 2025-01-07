@@ -56,7 +56,7 @@ export default function LandingPage() {
                 <PageLoading />
             ) : data && (
                 <main className=" px-3 md:px-10 py-12 space-y-16">
-                    <Categories />
+                    {/* <Categories /> */}
 
                     <section>
                         <h2 className="text-2xl font-semibold mb-8">New to Baranie</h2>

@@ -59,6 +59,7 @@ const FormInput: React.FC<FormInputProps> = ({
                       value="+959"
                       disabled
                       className="w-20  bg-muted"
+                      onWheel={e => e.preventDefault()}
                     />
                   )}
                   <Input

@@ -13,7 +13,7 @@ export const BookingSchema = z.object({
     bookingItems: z.array(
         z.object({
             serviceId: z.string(),
-            memberId: z.string(),
+            memberId: z.string().optional(),
         })
     ),
     startTime: z.number(),

@@ -26,9 +26,7 @@ const ProfileDropdown = ({ }: Props) => {
     const router = useRouter();
     const { deleteData } = useLocalstorage();
     const logoutHandler = () => {
-        localStorage.clear();
-        logout()
-        router.push('/login')
+        logout();
     }
     return (
         <>

@@ -93,6 +93,11 @@ export function CartSummary({ services, professionals, user, organization }: Pro
         router.push(`/shops/${shopId}/confirm?items=${items}&staff=${staff}&date=${date}&time=${time}`);
     }
 
+    const staffAnyToNull = (id: string) => {
+        return id == 'any' ? undefined : id
+
+    }
+
     const handleConfirm = () => {
         if (!user.phone) {
             return setIsPhoneDialogOpen(true)
@@ -107,7 +112,7 @@ export function CartSummary({ services, professionals, user, organization }: Pro
             gender: user.gender,
             profilePicture: user.profilePicture,
             email: user.email,
-            bookingItems: preItems.map((item) => ({ serviceId: item.sv, memberId: staff == 'per-service' ? item.pf : staff })),
+            bookingItems: preItems.map((item) => ({ serviceId: item.sv, memberId: staff == 'per-service' ? staffAnyToNull(item.pf) : staffAnyToNull(staff) })),
             startTime: Number(time)
         }
         mutate(payload)
