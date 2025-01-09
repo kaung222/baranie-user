@@ -27,7 +27,7 @@ const ShopCard = ({ organization }: Props) => {
                 <div className="px-4 py-6">
                     <div className="flex items-start justify-between ">
                         <h3 className="font-medium">{organization.name}</h3>
-                        <Badge variant="secondary" className="mb-2 bg-brandColor text-white">
+                        <Badge variant="secondary" className="mb-2 bg-brandColor text-white hover:bg-brandColor/90 ">
                             {organization?.types?.join(" & ")}
                         </Badge>
                     </div>

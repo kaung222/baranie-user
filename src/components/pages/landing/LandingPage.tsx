@@ -39,7 +39,7 @@ export default function LandingPage() {
                         className="object-cover object-top brightness-75"
                         priority
                     />
-                    <div className="absolute inset-0 flex flex-col items-center justify-center text-white px-4">
+                    <div className="absolute z-10 inset-0 flex flex-col items-center justify-center text-white px-4">
                         <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
                             Beauty & Wellness Near You
                         </h1>

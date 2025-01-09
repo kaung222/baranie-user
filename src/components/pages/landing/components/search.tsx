@@ -12,7 +12,7 @@ export function Search() {
                 <Input
                     type="text"
                     placeholder="Search for treatments..."
-                    className="border-0 focus-visible:ring-0"
+                    className="border-0 focus-visible:ring-0 text-black"
                 />
             </div>
             <div className="flex-1 flex items-center gap-2 px-3 border-t md:border-t-0 md:border-l border-gray-200">
@@ -20,10 +20,10 @@ export function Search() {
                 <Input
                     type="text"
                     placeholder="Choose location"
-                    className="border-0 focus-visible:ring-0"
+                    className="border-0 focus-visible:ring-0 text-black"
                 />
             </div>
-            <div className="flex-1 flex items-center gap-2 px-3 border-t md:border-t-0 md:border-l border-gray-200">
+            {/* <div className="flex-1 flex items-center gap-2 px-3 border-t md:border-t-0 md:border-l border-gray-200">
                 <Calendar className="h-5 w-5 text-gray-400" />
                 <Input
                     type="date"
@@ -36,7 +36,7 @@ export function Search() {
                     type="time"
                     className="border-0 focus-visible:ring-0"
                 />
-            </div>
+            </div> */}
             <Button size="lg" className="bg-pink-500 hover:bg-pink-600">
                 Search
             </Button>

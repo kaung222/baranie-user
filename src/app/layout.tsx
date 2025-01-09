@@ -15,7 +15,7 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: BrandName,
-  description: "Beauty Platform",
+  description: "Baranie, Myanmar, Beauty salon, Beauty parlor, Appointment, Booking, Service, Cms",
   icons: "/img/bera.png",
 };
 
