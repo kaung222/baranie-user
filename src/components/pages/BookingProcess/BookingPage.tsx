@@ -21,9 +21,6 @@ type Props = {
 export default function BookingPage({ children }: Props) {
     const router = useRouter();
     const { shopId } = useParams()
-    // const { data: categories } = useGetOrganizationServices(String(shopId));
-    // const { data: members } = useGetOrganizationMembers(String(shopId));
-    // const { data: Organization } = useGetDetailOrganization(String(shopId));
     const { data: result } = useGetDetailOrganizationBySlug(String(shopId))
     const { data: profile } = useGetProfile()
     return (

@@ -85,8 +85,8 @@ export default function MapSearchInput({ setMarkPosition }: Props) {
     const handleResultClick = (result: SearchResultsType) => {
         setQuery(result.display_name)
         setMarkPosition({ lat: String(result.lat), long: String(result.lon) })
-        setUrlQuery({ key: 'lat', value: result.lat })
-        setUrlQuery({ key: 'long', value: result.lon })
+        // setUrlQuery({ key: 'lat', value: result.lat })
+        // setUrlQuery({ key: 'long', value: result.lon })
         setIsSearching(false);
     }
 
@@ -106,12 +106,12 @@ export default function MapSearchInput({ setMarkPosition }: Props) {
                     onChange={handleInputChange}
                     onFocus={() => setIsSearching(true)}
                     onBlur={() => {
-                        if (query.length > 1) {
+                        if (query.length < 1) {
                             setIsSearching(false)
                         }
                     }}
                     className="border-0 focus-visible:ring-0 w-full"
-                    placeholder="Search Google Maps"
+                    placeholder="Location"
                 />
                 {query && (
                     <Button

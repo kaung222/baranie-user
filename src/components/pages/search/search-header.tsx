@@ -13,9 +13,15 @@ export function SearchHeader() {
     const [location, setLocation] = useState<{ lat: string | undefined, long: string | undefined }>({ lat: '', long: '' });
 
 
-    const handleSearch = useDebouncedCallback((query: string) => {
+    // const handleSearch = useDebouncedCallback((query: string) => {
+    //     setQuery({ key: 'search', value: searchQuery })
+    // }, 500);
+
+    const handleSearch = () => {
         setQuery({ key: 'search', value: searchQuery })
-    }, 500);
+        setQuery({ key: 'lat', value: location.lat || '' })
+        setQuery({ key: 'long', value: location.long || '' })
+    }
 
     return (
         <div className="flex flex-col gap-2 p-4 bg-white rounded-lg shadow-sm md:flex-row max-w-[700px] mx-auto ">
@@ -25,10 +31,10 @@ export function SearchHeader() {
                     value={searchQuery}
                     onChange={(e) => {
                         setSearchQuery(e.target.value)
-                        handleSearch(e.target.value)
+                        // handleSearch(e.target.value)
                     }}
                     type="text"
-                    placeholder="Treatment or keyword"
+                    placeholder="Search for shop name..."
                     className="border-0 focus-visible:ring-0"
                 />
                 {searchQuery && (
@@ -47,7 +53,7 @@ export function SearchHeader() {
                 <MapPin className="w-4 h-4 text-gray-400 shrink-0" />
                 <MapSearchInput setMarkPosition={setLocation} />
             </div>
-            <Button onClick={() => handleSearch(searchQuery)} className="w-full md:w-auto px-8 bg-pink-500 hover:bg-pink-600">Search</Button>
+            <Button onClick={() => handleSearch()} className="w-full md:w-auto px-8 bg-pink-500 hover:bg-pink-600">Search</Button>
         </div>
     )
 }
