@@ -10,7 +10,7 @@ const LogoWithBrand = () => {
         <div onClick={() => router.push('/')} className=' h-10 w-[180px] cursor-pointer flex items-center space-x-[10px] '>
             <Image src={`/img/bera.png`} alt='logo' width={40} height={40} className=' size-10' />
             <div>
-                <h2 className=' font-bold text-xl leading-tight tracking-tight text-brandColor '>Baranie</h2>
+                <h2 className=' font-bold text-xl leading-tight tracking-tight text-brandColor select-none '>Baranie</h2>
             </div>
         </div>
     )

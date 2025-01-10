@@ -23,7 +23,7 @@ export function ProfileShowcase() {
         return (
             <div className="relative">
                 <Button
-                    variant="ghost"
+                    variant="brandOutline"
                     className="absolute right-0 -top-14"
                     onClick={() => setIsEditing(false)}
                 >

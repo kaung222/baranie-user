@@ -4,7 +4,10 @@ export const RegisterSchema = z.object({
     firstName: z.string().min(1, "First name is required"), // firstName must be a non-empty string
     lastName: z.string().min(1, "Last name is required"), // lastName must be a non-empty string
     email: z.string().email("Invalid email format"),
-    phone: z.string().min(1, "Phone number is required").optional(),
+    phone: z.string().regex(
+        /^[+]?[0-9]{10,15}$/,
+        "Invalid phone number format. It should be 10 to 15 digits and may start with '+'"
+    ).optional(),
     password: z.string()
         .min(8, "Password must be at least 8 characters long") // Minimum length of 8 characters
         .max(100, "Password must be less than 100 characters") // Optional maximum length

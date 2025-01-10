@@ -12,7 +12,8 @@ export const useLogout = () => {
         },
         onSuccess(data) {
             toast({ title: "Log out success!" });
-            localStorage.clear()
+            localStorage.removeItem('accessToken')
+            localStorage.removeItem('user')
             router.push('/login')
         },
     })

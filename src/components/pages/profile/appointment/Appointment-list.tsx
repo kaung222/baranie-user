@@ -79,10 +79,6 @@ export function AppointmentsList() {
         <div className="">
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-2xl font-bold text-[#FF66A1]">My Appointments</h1>
-                <Button className="bg-[#FF66A1] hover:bg-[#FF66A1]/90">
-                    <Plus className="mr-2 h-4 w-4" />
-                    Book New
-                </Button>
             </div>
 
             <div className="grid lg:grid-cols-12 gap-6">

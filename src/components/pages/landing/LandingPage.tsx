@@ -22,35 +22,39 @@ import { useGetProfile } from '@/api/user/get-profile'
 import Header from '@/components/layout/Header'
 import { ShopGrid } from './components/new-shop-list'
 import { useEffect, useState } from 'react'
+import { useFavoriteShops, useRecentShops } from '@/api/localquery/local-function'
+import { useGetOrganizationByCity } from '@/api/organization/get-organizations-by-city'
 
 
 export default function LandingPage() {
     const { data, isLoading } = useGetAllOrganizations();
+    const { data: cityOrgs } = useGetOrganizationByCity('yangon')
+    const { shops: favoriteShops } = useFavoriteShops();
+    const { shops: recentShops } = useRecentShops()
 
-    const [location, setLocation] = useState<{
-        latitude: number | null;
-        longitude: number | null;
-    }>({ latitude: null, longitude: null });
+    // const [location, setLocation] = useState<{
+    //     latitude: number | null;
+    //     longitude: number | null;
+    // }>({ latitude: null, longitude: null });
 
-    const [error, setError] = useState<string | null>(null);
-    console.log(location)
+    // const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        if (!navigator.geolocation) {
-            setError("Geolocation is not supported by your browser");
-            return;
-        }
+    // useEffect(() => {
+    //     if (!navigator.geolocation) {
+    //         setError("Geolocation is not supported by your browser");
+    //         return;
+    //     }
 
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const { latitude, longitude } = position.coords;
-                setLocation({ latitude, longitude });
-            },
-            (err) => {
-                setError(err.message);
-            }
-        );
-    }, []);
+    //     navigator.geolocation.getCurrentPosition(
+    //         (position) => {
+    //             const { latitude, longitude } = position.coords;
+    //             setLocation({ latitude, longitude });
+    //         },
+    //         (err) => {
+    //             setError(err.message);
+    //         }
+    //     );
+    // }, []);
 
 
     return (
@@ -83,16 +87,28 @@ export default function LandingPage() {
             ) : data && (
                 <main className=" px-3 md:px-10 py-12 space-y-16">
                     {/* <Categories /> */}
-
+                    {favoriteShops && favoriteShops.length > 0 && (
+                        <section>
+                            <h2 className="text-2xl font-semibold mb-8">Favorites</h2>
+                            <ShopGrid organizations={favoriteShops} />
+                        </section>
+                    )}
+                    {recentShops && recentShops.length > 0 && (
+                        <section>
+                            <h2 className="text-2xl font-semibold mb-8">Recently viewed</h2>
+                            <ShopGrid organizations={recentShops} />
+                        </section>
+                    )}
                     <section>
                         <h2 className="text-2xl font-semibold mb-8">New to Baranie</h2>
                         <ShopGrid organizations={data.records} />
                     </section>
-
-                    {/* <section>
-                        <h2 className="text-2xl font-semibold mb-8">Trending</h2>
-                        <ServiceGrid organizations={data.records} />
-                    </section> */}
+                    {cityOrgs && cityOrgs.length > 0 && (
+                        <section>
+                            <h2 className="text-2xl font-semibold mb-8">Popular services in Yangon</h2>
+                            <ShopGrid organizations={cityOrgs} />
+                        </section>
+                    )}
 
                     <Testimonials />
                     <Newsletter />

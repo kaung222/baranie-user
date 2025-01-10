@@ -1,27 +1,10 @@
 'use client'
 
-import { useState } from 'react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select'
 import { CalendarIcon, Loader2, PencilIcon } from 'lucide-react'
-import { Calendar } from '@/components/ui/calendar'
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from '@/components/ui/popover'
-import { format } from 'date-fns'
-import { cn } from '@/lib/utils'
 import { User } from '@/types/user'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -33,6 +16,7 @@ import FormDate from '@/components/common/FormDate'
 import FormSelect from '@/components/common/FormSelect'
 import { useUpdateProfile } from '@/api/user/update-profile'
 import FormInputFileCrop from '@/components/common/FormInputFileCrop'
+import FormInputPhone from '@/components/common/FormInputPhone'
 
 
 
@@ -59,7 +43,11 @@ export function ProfileForm({ initialData, handleClose }: ProfileFormProps) {
 
 
     const handleUpdate = (values: z.infer<typeof userUpdateSchema>) => {
-        mutate(values)
+        mutate(values, {
+            onSuccess(data, variables, context) {
+                handleClose()
+            },
+        })
     }
 
     return (
@@ -80,7 +68,7 @@ export function ProfileForm({ initialData, handleClose }: ProfileFormProps) {
                                 </div>
                                 <Label
                                     htmlFor='profile'
-                                    className="absolute bottom-0 right-0 rounded-full"
+                                    className="absolute bottom-0 right-0 rounded-full bg-gray-100 size-8 p-2 "
                                 >
                                     <PencilIcon className="h-4 w-4" />
                                 </Label>
@@ -95,14 +83,14 @@ export function ProfileForm({ initialData, handleClose }: ProfileFormProps) {
 
                         <div className="space-y-4">
                             <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-2">
+                                <div className="space-y-2 col-span-2 md:col-span-1">
                                     <FormInput
                                         form={form}
                                         name='firstName'
                                         label='First Name'
                                     />
                                 </div>
-                                <div className="space-y-2">
+                                <div className="space-y-2 col-span-2 md:col-span-1">
                                     <FormInput
                                         form={form}
                                         label='Last Name'
@@ -112,20 +100,14 @@ export function ProfileForm({ initialData, handleClose }: ProfileFormProps) {
                             </div>
 
                             <div className="space-y-2">
-                                <FormInput
+                                <FormInputPhone
                                     form={form}
-                                    name='phone'
+                                    name="phone"
                                     label='Phone Number'
-                                    type='tel'
                                 />
                             </div>
 
                             <div className="space-y-2">
-                                {/* <FormDate
-                                    form={form}
-                                    label='Date of birth'
-                                    name='dob'
-                                /> */}
                                 <FormInput
                                     form={form}
                                     name='dob'
@@ -147,7 +129,7 @@ export function ProfileForm({ initialData, handleClose }: ProfileFormProps) {
                 </Card>
 
                 <div className="flex justify-end gap-4">
-                    <Button type="submit" className="bg-black hover:bg-black/90">
+                    <Button type="submit" variant="brandDefault" >
                         {isPending ? (
                             <>
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

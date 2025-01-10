@@ -49,8 +49,9 @@ ApiClient.interceptors.response.use(
 
         // If the error is 401 and the request was not retried error.response?.data?.message == "jwt expired" &&
         if (error.response?.status === 401 && (error.response?.data?.message == "Role cannot access!" || "Session expired, login again!")) {
-            localStorage.clear();
-            return history.pushState({}, '', '/login')
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('user');
+            return history.pushState({}, '', '/login');
         }
         if (error.response?.status === 401 && (error.response?.data?.message == "jwt expired") && !originalRequest._retry) {
 

@@ -14,6 +14,7 @@ import FormInput from '@/components/common/FormInput'
 import { RegisterSchema } from 'validation-schema/register.schema'
 import { z } from 'zod'
 import { useRegister } from '@/api/auth/register'
+import FormInputPhone from '@/components/common/FormInputPhone'
 
 export function SignUpForm() {
     const { mutate } = useRegister()
@@ -89,38 +90,19 @@ export function SignUpForm() {
                     </div>
 
                     <div className="space-y-2">
-                        <FormInput
+                        <FormInputPhone
+                            form={form}
+                            name='phone'
+                            label="Mobile number"
+                        />
+                        {/* <FormInput
                             form={form}
                             name='phone'
                             label='Mobile number'
                             type='tel'
                             placeholder='Enter your mobile number'
-                        />
+                        /> */}
                     </div>
-
-                    {/* <div className="flex items-start space-x-2">
-                    <Checkbox
-                        id="terms"
-                        checked={formData.agreeToTerms}
-                        onCheckedChange={(checked) =>
-                            setFormData(prev => ({ ...prev, agreeToTerms: checked as boolean }))
-                        }
-                    />
-                    <Label htmlFor="terms" className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                        I agree to the{' '}
-                        <Link href="/privacy-policy" className="text-primary hover:underline">
-                            Privacy policy
-                        </Link>
-                        ,{' '}
-                        <Link href="/terms" className="text-primary hover:underline">
-                            Terms of Service
-                        </Link>
-                        {' '}and{' '}
-                        <Link href="/business-terms" className="text-primary hover:underline">
-                            Terms of Business
-                        </Link>
-                    </Label>
-                </div> */}
                 </div>
 
                 <Button

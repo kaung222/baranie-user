@@ -26,7 +26,7 @@ export function
                 categories && (
                     <div className="space-y-6">
                         <h1 className=' font-bold text-xl '>Services</h1>
-                        <Tabs defaultValue={categories[0].name} className="">
+                        <Tabs defaultValue={categories[0]?.name} className="">
                             <TabsList className="flex gap-2 justify-start items-center sticky top-[60px] bg-white z-10 py-2">
                                 {categories.map(category => (
                                     <TabsTrigger key={category.id} value={category.name}>{category.name}</TabsTrigger>
@@ -43,20 +43,6 @@ export function
                                 </TabsContent>
                             ))}
                         </Tabs>
-                        {/* <div className="flex gap-2 sticky top-[60px] bg-white z-20 py-2 ">
-                            {categories.map((category) => (
-                                <Button key={category.id} variant="secondary" className="rounded-full">
-                                    {category.name}
-                                </Button>
-                            ))}
-                        </div>
-
-                        <div className=' w-full space-y-5'>
-                            {categories.flatMap(category => category.services).map((service) => (
-                                <ServiceCard key={service.id} service={service} />
-                            ))}
-
-                        </div> */}
                     </div>
                 )
             }

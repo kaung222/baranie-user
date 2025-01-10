@@ -12,7 +12,10 @@ export function Search() {
     const [searchQuery, setSearchQuery] = useState('')
     const [location, setLocation] = useState<{ lat: string | undefined, long: string | undefined }>({ lat: undefined, long: undefined })
     const handleSearch = () => {
-        router.push(`/search?search=${searchQuery}&lat=${location.lat || ''}&long=${location.long || ''}`)
+        const searchParam = searchQuery ? `search=${searchQuery}` : ''
+        const latParam = location.lat ? `lat=${location.lat}` : ''
+        const longParam = location.long ? `long=${location.long}` : ''
+        router.push(`/search?${searchParam}${latParam && `&${latParam}`}${longParam && `&${longParam}`}`)
     }
     return (
         <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg p-2 flex flex-col md:flex-row gap-2">

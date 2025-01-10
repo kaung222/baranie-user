@@ -33,6 +33,8 @@ import ConfirmDialog from '@/components/common/confirm-dialog'
 import ControllableDialog from '@/components/common/control-dialog'
 import AppDialog from '@/components/common/dialog'
 import { QuickLogin } from './quick-login'
+import { useEffect } from 'react'
+import { useRecentShops } from '@/api/localquery/local-function'
 
 export default function ShopDetails() {
     const { getQuery } = useSetUrlParams()
@@ -41,7 +43,13 @@ export default function ShopDetails() {
     const router = useRouter()
     const { shopId } = useParams()
     const { data: organization, isLoading } = useGetDetailOrganizationBySlug(String(shopId))
+    const { addRecentShops } = useRecentShops()
 
+    useEffect(() => {
+        if (organization) {
+            addRecentShops(organization.organization)
+        }
+    }, [organization])
 
     return (
         <div className="min-h-screen bg-background">
@@ -51,7 +59,7 @@ export default function ShopDetails() {
                 <PageLoading />
             ) : organization && (
                 <main className=" px-3 md:px-10 py-6 space-y-6">
-                    <BreadCrumb shopName={organization.organization.name} />
+                    <BreadCrumb organization={organization.organization} />
                     <Gallery organization={organization.organization} />
 
                     <div className=' w-full flex gap '>
