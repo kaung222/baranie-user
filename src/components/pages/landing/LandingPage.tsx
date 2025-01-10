@@ -21,10 +21,36 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useGetProfile } from '@/api/user/get-profile'
 import Header from '@/components/layout/Header'
 import { ShopGrid } from './components/new-shop-list'
+import { useEffect, useState } from 'react'
 
 
 export default function LandingPage() {
     const { data, isLoading } = useGetAllOrganizations();
+
+    const [location, setLocation] = useState<{
+        latitude: number | null;
+        longitude: number | null;
+    }>({ latitude: null, longitude: null });
+
+    const [error, setError] = useState<string | null>(null);
+    console.log(location)
+
+    useEffect(() => {
+        if (!navigator.geolocation) {
+            setError("Geolocation is not supported by your browser");
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords;
+                setLocation({ latitude, longitude });
+            },
+            (err) => {
+                setError(err.message);
+            }
+        );
+    }, []);
 
 
     return (

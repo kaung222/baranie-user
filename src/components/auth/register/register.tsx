@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { SignUpForm } from './sign-up-form'
+import Link from 'next/link'
 
 export default function RegisterPage() {
     return (
@@ -25,6 +26,15 @@ export default function RegisterPage() {
                     </div>
 
                     <SignUpForm />
+                    <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+                        <p className=" text-center text-sm text-gray-600 ">
+                            Already have an account? Go to
+                            <Link href="/login" className="font-medium text-brandColor hover:underline ">
+                                &nbsp;login
+                            </Link>
+                            .
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>

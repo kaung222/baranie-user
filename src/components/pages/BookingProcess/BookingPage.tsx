@@ -1,5 +1,5 @@
 'use client'
-import { ArrowLeft, X } from "lucide-react";
+import { ArrowLeft, ChevronUp, X } from "lucide-react";
 import { Breadcrumb } from "./services-select/bread-crumb";
 import { CartSummary } from "./services-select/cart-summery";
 import { ServiceCategories } from "./services-select/service-categories";
@@ -14,6 +14,7 @@ import { useGetOrganizationServices } from "@/api/organization/get-organization-
 import { useGetOrganizationMembers } from "@/api/organization/get-org-members";
 import { useGetProfile } from "@/api/user/get-profile";
 import { useGetDetailOrganizationBySlug } from "@/api/organization/get-detail-organization-bySlug";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 
 type Props = {
     children: React.ReactNode
@@ -36,14 +37,16 @@ export default function BookingPage({ children }: Props) {
             <div className=" px-3 md:px-10 py-6">
                 <Breadcrumb slug={result?.organization?.slug || ''} shopName={result?.organization?.name || ''} />
                 <div className="flex gap-6 ">
-                    <div className=" w-full md:w-[60%] ">
+                    <div className=" w-full lg:w-[60%] ">
                         {children}
+                        {/* spacer  */}
+                        <div className=" h-[200px] "></div>
                     </div>
-                    <div className=" hidden md:block md:w-[40%] p-5 ">
-                        {result?.services && result.members && profile && (
-                            <CartSummary organization={result.organization} user={profile} services={result.services?.flatMap(c => c.services)} professionals={result.members} />
-                        )}
-                    </div>
+
+                    {result?.services && result.members && profile && (
+                        <CartSummary organization={result.organization} user={profile} services={result.services?.flatMap(c => c.services)} professionals={result.members} />
+                    )}
+
                 </div>
             </div>
         </div>

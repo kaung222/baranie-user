@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronDown, Loader2, Star } from 'lucide-react'
+import { ChevronDown, ChevronUp, Loader2, Star } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import useSetUrlParams from '@/lib/hooks/urlSearchParam'
 import { useParams, usePathname, useRouter } from 'next/navigation'
@@ -16,6 +16,8 @@ import { PhoneNumberDialog } from './phone-add-dialog'
 import { useState } from 'react'
 import { Organization } from '@/types/organization'
 import Image from 'next/image'
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+
 
 type Props = {
     services: Service[];
@@ -115,7 +117,11 @@ export function CartSummary({ services, professionals, user, organization }: Pro
             bookingItems: preItems.map((item) => ({ serviceId: item.sv, memberId: staff == 'per-service' ? staffAnyToNull(item.pf) : staffAnyToNull(staff) })),
             startTime: Number(time)
         }
-        mutate(payload)
+        mutate(payload, {
+            onSuccess() {
+                router.push('/appointment')
+            }
+        })
         console.log(payload)
     }
 
@@ -123,7 +129,7 @@ export function CartSummary({ services, professionals, user, organization }: Pro
     const totalOriginalPrice = showCageBookingItems.flatMap(item => item.service).reduce((pv, cv) => pv + Number(cv?.price), 0);
     const totalDiscountPrice = showCageBookingItems.flatMap(item => item.service).reduce((pv, cv) => pv + Number(cv?.discountPrice), 0);
 
-    return (
+    const SummaryContent = () => (
         <div className="bg-white rounded-lg border p-6 space-y-6 sticky top-[100px] ">
             <div className=' flex items-start gap-2 '>
                 <Avatar className=' rounded-sm w-24 h-20 '>
@@ -188,7 +194,7 @@ export function CartSummary({ services, professionals, user, organization }: Pro
             </div>
 
             {currentPath.endsWith('/booking') && (
-                <Button disabled={isPending} onClick={() => handleContinueFromBooking()} className="w-full bg-black hover:bg-black/90">
+                <Button disabled={isPending} onClick={() => handleContinueFromBooking()} variant="brandDefault" className="w-full ">
                     {isPending ? (
                         <>
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -200,7 +206,7 @@ export function CartSummary({ services, professionals, user, organization }: Pro
                 </Button>
             )}
             {currentPath.endsWith('/professionals') && (
-                <Button disabled={isPending} onClick={() => handleContinueFromProfessionals()} className="w-full bg-black hover:bg-black/90">
+                <Button disabled={isPending} onClick={() => handleContinueFromProfessionals()} variant="brandDefault" className="w-full ">
                     {isPending ? (
                         <>
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -212,7 +218,7 @@ export function CartSummary({ services, professionals, user, organization }: Pro
                 </Button>
             )}
             {currentPath.endsWith('/staff-per-service') && (
-                <Button disabled={isPending} onClick={() => handleContinueFromProfessionalPerService()} className="w-full bg-black hover:bg-black/90">
+                <Button disabled={isPending} onClick={() => handleContinueFromProfessionalPerService()} variant="brandDefault" className="">
                     {isPending ? (
                         <>
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -224,7 +230,7 @@ export function CartSummary({ services, professionals, user, organization }: Pro
                 </Button>
             )}
             {currentPath.endsWith('/schedule') && (
-                <Button disabled={isPending} onClick={() => handleContinueFromSchedule()} className="w-full bg-black hover:bg-black/90">
+                <Button disabled={isPending} onClick={() => handleContinueFromSchedule()} variant="brandDefault" className="w-full ">
                     {isPending ? (
                         <>
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -236,7 +242,7 @@ export function CartSummary({ services, professionals, user, organization }: Pro
                 </Button>
             )}
             {currentPath.endsWith('/confirm') && (
-                <Button disabled={isPending} onClick={() => handleConfirm()} className="w-full bg-black hover:bg-black/90">
+                <Button disabled={isPending} onClick={() => handleConfirm()} variant='brandDefault' className="w-full ">
                     {isPending ? (
                         <>
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -253,6 +259,104 @@ export function CartSummary({ services, professionals, user, organization }: Pro
                 onClose={() => setIsPhoneDialogOpen(false)}
             />
         </div>
+    )
+
+    return (
+        <>
+            {/* Desktop Summary */}
+            <div className=" hidden lg:block lg:w-[40%] p-5 ">
+                <SummaryContent />
+            </div>
+
+            {/* Mobile Bottom Bar */}
+            <div className="fixed bottom-0 left-0 right-0 lg:hidden">
+                <Sheet>
+                    <div className="flex items-center justify-between px-4 py-3 bg-white border-t">
+                        <div>
+                            <div className="text-sm text-gray-600">Total</div>
+                            <div className="text-lg font-bold">{totalDiscountPrice} MMK</div>
+                        </div>
+                        <div className="flex gap-2">
+                            <SheetTrigger asChild>
+                                <Button variant="outline" size="sm">
+                                    View Summary
+                                    <ChevronUp className="w-4 h-4 ml-1" />
+                                </Button>
+                            </SheetTrigger>
+                            {currentPath.endsWith('/booking') && (
+                                <Button disabled={isPending} onClick={() => handleContinueFromBooking()} variant="brandDefault">
+                                    {isPending ? (
+                                        <>
+                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                            processing...
+                                        </>
+                                    ) : (
+                                        'Continue'
+                                    )}
+                                </Button>
+                            )}
+                            {currentPath.endsWith('/professionals') && (
+                                <Button disabled={isPending} onClick={() => handleContinueFromProfessionals()} variant="brandDefault">
+                                    {isPending ? (
+                                        <>
+                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                            processing...
+                                        </>
+                                    ) : (
+                                        'Continue'
+                                    )}
+                                </Button>
+                            )}
+                            {currentPath.endsWith('/staff-per-service') && (
+                                <Button disabled={isPending} onClick={() => handleContinueFromProfessionalPerService()} variant="brandDefault">
+                                    {isPending ? (
+                                        <>
+                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                            processing...
+                                        </>
+                                    ) : (
+                                        'Continue'
+                                    )}
+                                </Button>
+                            )}
+                            {currentPath.endsWith('/schedule') && (
+                                <Button disabled={isPending} onClick={() => handleContinueFromSchedule()} variant="brandDefault">
+                                    {isPending ? (
+                                        <>
+                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                            processing...
+                                        </>
+                                    ) : (
+                                        'Continue'
+                                    )}
+                                </Button>
+                            )}
+                            {currentPath.endsWith('/confirm') && (
+                                <Button disabled={isPending} onClick={() => handleConfirm()} variant="brandDefault">
+                                    {isPending ? (
+                                        <>
+                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                            submitting...
+                                        </>
+                                    ) : (
+                                        'Confirm'
+                                    )}
+                                </Button>
+                            )}
+                        </div>
+                    </div>
+                    <SheetContent side="bottom" className="h-[90vh] overflow-y-auto">
+                        <SheetHeader>
+                            <SheetTitle>Booking Summary</SheetTitle>
+                        </SheetHeader>
+                        <div className="mt-4">
+                            <SummaryContent />
+                        </div>
+                    </SheetContent>
+                </Sheet>
+            </div>
+        </>
+
     )
 }
 

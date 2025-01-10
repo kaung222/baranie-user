@@ -9,6 +9,8 @@ import { PencilIcon, Mail, Phone, Cake, User2 } from 'lucide-react'
 import { ProfileForm } from './ProfileEditForm'
 import { useGetProfile } from '@/api/user/get-profile'
 import PageLoading from '@/components/common/PageLoading'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { shortName } from '@/lib/utils'
 
 
 
@@ -51,13 +53,10 @@ export function ProfileShowcase() {
                                 <div className="flex gap-6">
                                     <div className="relative">
                                         <div className="w-24 h-24 rounded-full overflow-hidden">
-                                            <Image
-                                                src={user.profilePicture}
-                                                alt="Profile picture"
-                                                width={96}
-                                                height={96}
-                                                className="object-cover"
-                                            />
+                                            <Avatar className=' w-full h-full '>
+                                                <AvatarImage src={user.profilePicture} alt={shortName(user.firstName)} className=' object-cover ' />
+                                                <AvatarFallback className=" ">{shortName(user.firstName)}</AvatarFallback>
+                                            </Avatar>
                                         </div>
                                     </div>
                                     <div className="space-y-1">

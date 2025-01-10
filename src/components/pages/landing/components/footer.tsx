@@ -4,7 +4,7 @@ import { Facebook, Instagram, Twitter, Youtube, Linkedin, TwitterIcon as TikTok 
 const businessLinks = [
     { name: "For Partners", href: `https://management.baranie.com/` },
     { name: "Pricing", href: "/pricing" },
-    { name: "Support", href: "/support" },
+    { name: "Support", href: "/contact" },
 ]
 
 const legalLinks = [

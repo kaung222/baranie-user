@@ -19,6 +19,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useGetMyAppointments } from '@/api/appointment/get-my-appointments'
 import { secondToHour, shortName } from '@/lib/utils'
 import { AppointmentForAll } from '@/types/appointment'
+import CircleLoading from '@/components/layout/circle-loading'
+import AppointmentCard from './appointment-card'
 
 interface Appointment {
     id: string
@@ -40,27 +42,8 @@ interface Appointment {
 export function AppointmentsList() {
     const [selectedAppointment, setSelectedAppointment] = useState<AppointmentForAll | null>(null)
     const [isDetailsOpen, setIsDetailsOpen] = useState(false)
-    const { data: appointments } = useGetMyAppointments()
+    const { data: appointments, isLoading } = useGetMyAppointments()
 
-    // Mock data - replace with your actual data
-    // const appointments: Appointment[] = [
-    //     {
-    //         id: '1',
-    //         serviceName: 'Service Platform',
-    //         date: new Date(2024, 11, 9, 8, 0),
-    //         duration: 105,
-    //         status: 'confirmed',
-    //         price: 9540,
-    //         location: 'Yangon Airport Road, Yangon, Yangon Region',
-    //         serviceImage: '/placeholder.svg?height=80&width=80',
-    //         items: [
-    //             { name: 'Double', duration: 75, price: 5040 },
-    //             { name: 'Nail Color', duration: 30, price: 4500 }
-    //         ],
-    //         bookingRef: 'ADA651ID'
-    //     },
-    //     // Add more appointments as needed
-    // ]
 
     const getStatusColor = (status: string) => {
         switch (status) {
@@ -75,6 +58,21 @@ export function AppointmentsList() {
             default:
                 return 'bg-gray-100 text-gray-800'
         }
+    }
+
+    const upcomingAppointments = (appointments: AppointmentForAll[]) => {
+        return appointments.filter((appointment) => {
+            const scheduleTime = new Date(appointment.date).getTime() + (appointment.startTime * 1000)
+            const currentTime = Date.now()
+            return scheduleTime >= currentTime
+        })
+    }
+    const pastAppointments = (appointments: AppointmentForAll[]) => {
+        return appointments.filter((appointment) => {
+            const scheduleTime = new Date(appointment.date).getTime() + (appointment.startTime * 1000)
+            const currentTime = Date.now()
+            return scheduleTime <= currentTime
+        })
     }
 
     return (
@@ -107,63 +105,11 @@ export function AppointmentsList() {
 
                         <TabsContent value="upcoming">
                             <div className="grid gap-4">
-                                {appointments?.records && appointments.records.length > 0 ? (
-                                    appointments?.records?.map((appointment) => (
-                                        <div
-                                            key={appointment.id}
-                                            className="bg-white rounded-lg border p-4 hover:shadow-md transition-shadow"
-                                        >
-                                            <div className="flex items-start gap-4">
-                                                <Avatar className="h-20 w-20 rounded-lg">
-                                                    <AvatarImage src={appointment.organization.thumbnail} />
-                                                    <AvatarFallback>SP</AvatarFallback>
-                                                </Avatar>
-
-                                                <div className="flex-1">
-                                                    <div className="flex items-start justify-between">
-                                                        <div>
-                                                            <h3 className="font-semibold text-lg">{appointment.organization.name}</h3>
-                                                            <div className="flex items-center gap-2 text-sm text-gray-600 mt-1">
-                                                                <Calendar className="h-4 w-4" />
-                                                                {format(appointment.date, 'EEE, MMM d, yyyy')}
-                                                                <Clock className="h-4 w-4 ml-2" />
-                                                                {secondToHour(appointment.startTime)}
-                                                            </div>
-                                                            <div className="flex items-center gap-2 text-sm text-gray-600 mt-1">
-                                                                <MapPin className="h-4 w-4" />
-                                                                {appointment.organization.address}
-                                                            </div>
-                                                        </div>
-
-                                                        <div className="flex flex-col items-end gap-2">
-                                                            <Badge className={getStatusColor(appointment.status)}>
-                                                                {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)}
-                                                            </Badge>
-                                                            <span className="font-semibold">
-                                                                MMK {appointment.discountPrice.toLocaleString()}
-                                                            </span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="flex items-center justify-between mt-4">
-                                                        <div className="flex gap-2">
-                                                            <Button
-                                                                variant="outline"
-                                                                size="sm"
-                                                                onClick={() => {
-                                                                    setSelectedAppointment(appointment)
-                                                                    setIsDetailsOpen(true)
-                                                                }}
-                                                            >
-                                                                <Info className="h-4 w-4 mr-2" />
-                                                                View Details
-                                                            </Button>
-                                                        </div>
-                                                        <ChevronRight className="h-5 w-5 text-gray-400" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                {isLoading ? (
+                                    <CircleLoading />
+                                ) : appointments?.records && appointments.records.length > 0 ? (
+                                    upcomingAppointments(appointments.records).map((appointment) => (
+                                        <AppointmentCard key={appointment.id} appointment={appointment} setIsDetailsOpen={setIsDetailsOpen} setSelectedAppointment={setSelectedAppointment} />
                                     ))
                                 ) : (
                                     <div className="text-center py-12 bg-gray-50 rounded-lg">
@@ -182,6 +128,26 @@ export function AppointmentsList() {
 
                         <TabsContent value="past">
                             {/* Similar structure as upcoming, but with past appointments */}
+                            <div className="grid gap-4">
+                                {isLoading ? (
+                                    <CircleLoading />
+                                ) : appointments?.records && appointments.records.length > 0 ? (
+                                    pastAppointments(appointments.records).map((appointment) => (
+                                        <AppointmentCard key={appointment.id} appointment={appointment} setIsDetailsOpen={setIsDetailsOpen} setSelectedAppointment={setSelectedAppointment} />
+                                    ))
+                                ) : (
+                                    <div className="text-center py-12 bg-gray-50 rounded-lg">
+                                        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                            <Calendar className="h-8 w-8 text-gray-400" />
+                                        </div>
+                                        <h3 className="text-lg font-medium text-gray-900">No past appointments</h3>
+                                        <p className="text-gray-500 mt-1">Your  appointments will appear here when you book.</p>
+                                        <Button className="mt-4 bg-[#FF66A1] hover:bg-[#FF66A1]/90">
+                                            Book an Appointment
+                                        </Button>
+                                    </div>
+                                )}
+                            </div>
                         </TabsContent>
                     </Tabs>
                 </div>

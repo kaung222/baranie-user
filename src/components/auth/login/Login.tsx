@@ -30,15 +30,13 @@ export default function SignUpPage() {
 
                     <SignInForm />
 
-                    <div className="text-center">
-                        <p className="text-sm text-muted-foreground">
-                            Are you a customer looking to book an appointment?{' '}
-                            <Link
-                                href="/professional/signup"
-                                className="text-primary hover:text-primary/90 font-medium"
-                            >
-                                Go to Baranie for professional
+                    <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+                        <p className=" text-center text-sm text-gray-600 ">
+                            Don&apos;t have an account? Go to
+                            <Link href="/register" className="font-medium text-brandColor hover:underline ">
+                                &nbsp;register
                             </Link>
+                            .
                         </p>
                     </div>
                 </div>
