@@ -31,7 +31,6 @@ export function SignUpForm() {
 
 
     const handleRegister = async (values: z.infer<typeof RegisterSchema>) => {
-        console.log(values)
         mutate(values)
     }
 

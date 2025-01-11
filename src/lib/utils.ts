@@ -76,11 +76,9 @@ type Data = {
   second: string;
 }
 export const checkChange = (checkData: Data[]) => {
-  console.log(checkData)
   const check = checkData.find((data) => data.first != data.second);
   return check ? true : false
 }
-
 
 // Function to get the start and end days of the current month
 export function getStartAndEndOfMonth(date: string): { startOfMonth: Date; endOfMonth: Date } {

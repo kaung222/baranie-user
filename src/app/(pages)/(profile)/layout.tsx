@@ -8,11 +8,11 @@ export default function ProfileLayout({
     children: React.ReactNode
 }) {
     return (
-        <div className="min-h-screen bg-background">
+        <div className=" h-[calc(100vh-60px)] bg-background">
             <Header />
-            <div className="flex">
+            <div className="flex h-full">
                 <Sidebar />
-                <main className="flex-1 py-10 ">
+                <main className="flex-1 h-full py-10 overflow-auto ">
                     {children}
                 </main>
             </div>

@@ -18,7 +18,6 @@ import { useApiGoogleLogin } from '@/api/auth/login-google'
 export function QuickLogin() {
     const { mutate, isPending } = useLogin();
     const { mutate: googleMutate } = useApiGoogleLogin()
-    const router = useRouter()
     const form = useForm({
         resolver: zodResolver(LoginSchema),
         defaultValues: {
@@ -28,7 +27,6 @@ export function QuickLogin() {
     });
 
     const handleLogin = async (values: z.infer<typeof LoginSchema>) => {
-        console.log(values)
         mutate(values, {
             onSuccess() {
                 window.location.reload()
@@ -84,7 +82,6 @@ export function QuickLogin() {
             <div className="space-y-3">
                 <GoogleLogin
                     onSuccess={credentialResponse => {
-                        console.log(credentialResponse);
                         if (credentialResponse.credential) {
                             googleMutate({ token: credentialResponse.credential }, {
                                 onSuccess() {
@@ -94,7 +91,7 @@ export function QuickLogin() {
                         }
                     }}
                     onError={() => {
-                        console.log('Login Failed');
+
                     }}
                 />
             </div>

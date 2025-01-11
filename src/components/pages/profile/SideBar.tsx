@@ -10,8 +10,8 @@ import { Button } from '@/components/ui/button'
 const navigation = [
     { name: 'Profile', href: '/profile', icon: User },
     { name: 'Appointment', href: '/appointment', icon: Calendar },
-    { name: 'Favorites', href: '/favorites', icon: Heart },
-    { name: 'Product orders', href: '/orders', icon: ShoppingBag },
+    // { name: 'Favorites', href: '/favorites', icon: Heart },
+    // { name: 'Product orders', href: '/orders', icon: ShoppingBag },
     { name: 'Settings', href: '/settings', icon: Settings },
 
 ]
@@ -21,8 +21,8 @@ export function Sidebar() {
 
     return (
         <>
-            <div className="w-64 min-h-[calc(100vh-73px)] hidden md:block border-r bg-gray-50/40">
-                <nav className="space-y-1 p-4">
+            <div className="w-64 h-full overflow-auto hidden md:block border-r bg-gray-50/40">
+                <nav className="space-y-1 p-4 mb-10">
                     {navigation.map((item) => (
                         <Link
                             key={item.name}

@@ -65,7 +65,6 @@ export function CartSummary({ services, professionals, user, organization }: Pro
 
 
     const handleContinueFromBooking = () => {
-        console.log(items)
         if (!items || items == '[]') {
             return toast({ title: "At least, one selected service need to book appointment!", variant: "destructive" })
         }
@@ -122,7 +121,6 @@ export function CartSummary({ services, professionals, user, organization }: Pro
                 router.push('/appointment')
             }
         })
-        console.log(payload)
     }
 
 

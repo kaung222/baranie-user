@@ -66,7 +66,6 @@ export default function ContactSupportPage() {
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         // Simulate API call
-        console.log(values)
         mutate({
             from: values.email || undefined,
             text: values.content,

@@ -28,7 +28,6 @@ export function SignInForm() {
     });
 
     const handleLogin = async (values: z.infer<typeof LoginSchema>) => {
-        console.log(values)
         mutate(values, {
             onSuccess() {
                 router.push('/');
@@ -106,7 +105,6 @@ export function SignInForm() {
                 </Button> */}
                 <GoogleLogin
                     onSuccess={credentialResponse => {
-                        console.log(credentialResponse);
                         if (credentialResponse.credential) {
                             googleMutate({ token: credentialResponse.credential }, {
                                 onSuccess() {
@@ -116,7 +114,6 @@ export function SignInForm() {
                         }
                     }}
                     onError={() => {
-                        console.log('Login Failed');
                     }}
                 />
             </div>

@@ -24,6 +24,8 @@ import { ShopGrid } from './components/new-shop-list'
 import { useEffect, useState } from 'react'
 import { useFavoriteShops, useRecentShops } from '@/api/localquery/local-function'
 import { useGetOrganizationByCity } from '@/api/organization/get-organizations-by-city'
+import { HowItWorks } from './components/how-it-work'
+import AdvertiseSection from './business-advertise/AdvertisePage'
 
 
 export default function LandingPage() {
@@ -110,8 +112,13 @@ export default function LandingPage() {
                         </section>
                     )}
 
-                    <Testimonials />
-                    <Newsletter />
+                    <section className="py-12">
+                        <h2 className="text-2xl font-bold text-center mb-12">How It Works</h2>
+                        <HowItWorks />
+                    </section>
+                    <AdvertiseSection />
+
+
                 </main>
             )}
 
